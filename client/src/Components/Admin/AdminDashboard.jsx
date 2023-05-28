@@ -11,12 +11,15 @@ import {
 import { Routes, Route, Link, Outlet } from "react-router-dom";
 import ProductManagement from "./ProductManagement";
 import UserManagement from "./UserManagement";
+import EditProduct from "./EditProduct"
+// axios test
 
 const { Header, Sider, Content } = Layout;
 
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const colorBgContainer = "#fff";
+
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -64,10 +67,8 @@ const Dashboard = () => {
         >
           <Routes>
             <Route path="/quan-ly-san-pham" element={<ProductManagement />} />
-            <Route
-              path="/quan-ly-san-pham/tao-moi-san-pham"
-              element={<FormCreateProduct />}
-            />
+            <Route path="/quan-ly-san-pham/tao-moi-san-pham" element={<FormCreateProduct />}/>
+            <Route path="/quan-ly-san-pham/:id/edit" element={<EditProduct />}/>
             <Route path="/quan-ly-nguoi-dung" element={<UserManagement />} />
           </Routes>
 
