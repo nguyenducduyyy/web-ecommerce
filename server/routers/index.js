@@ -1,8 +1,10 @@
-const apiRouter = require('./api/apiRouter')
+const apiRouter = require("./api/apiRouter");
+const passport = require("passport");
+
 
 function route(app) {
-    app.use('/api',apiRouter)
-    
+  app.use("/api", apiRouter);
+  
 }
 
-module.exports = route
+module.exports = route;

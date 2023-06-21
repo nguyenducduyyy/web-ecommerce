@@ -1,0 +1,176 @@
+.banner {
+    position: relative;
+  }
+  
+  .bannerImage {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  .bannerContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+  }
+  .banner {
+    position: relative;
+  }
+  
+  .prevButton,
+  .nextButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    color: #d3aaaa;
+    font-size: 30px;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .prevButton {
+    left: 0;
+    margin-left: 20px;
+  }
+  
+  .nextButton {
+    right: 0;
+    margin-right: 20px;
+  }
+  
+  .prevButton:hover,
+  .nextButton:hover {
+    color: #333;
+  }
+  
+/* xu ly newArrial */
+
+
+.newArrivals {
+    text-align: center;
+    margin-top: 80px;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  
+  .newArrivalsTitle {
+    text-align: center;
+  }
+
+  .newArrivalsTitle_h6{
+    color: rgb(168, 178, 186);
+    margin-bottom: 40px;
+  }
+
+  /* Bennifit */
+
+  .benefit{
+    margin-top: 40px;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  .benefitCard {
+    display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background-color: #f5f5f5;
+  border: none;
+
+  }
+  
+  .benefitContent {
+    display: flex;
+    align-items: center;
+  }
+  
+  .benefitIcon {
+    padding-right: 10px;
+    color: #d3aaaa;
+  }
+  
+  .benefitTextContainer {
+    margin-left: 8px; /* Khoảng cách giữa icon và chữ */
+  }
+  
+  .benefitTitle {
+    color: #d3aaaa;
+  }
+  
+  .benefitText {
+    /* CSS cho văn bản */
+  }
+  
+
+  /* Promo */
+
+  .promo {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    margin: 0 5%;
+  }
+  
+  .promoSection {
+    flex: 1;
+    padding: 60px;
+    background-color: #f5f5f5;
+    text-align: center;
+    background-color:cadetblue ;
+    
+    border-radius: 5px;
+  }
+  
+  .firstSection {
+    flex: 2;
+    background-color: #f5f5f5;
+    padding: 40px;
+    text-align: center;
+    background-color:cadetblue ;
+    border-radius: 5px;
+    margin-right: 20px;
+  }
+  
+  /* .secondSection {
+    flex: 1;
+    background-color: #f5f5f5;
+    padding: 40px;
+    text-align: center;
+    border-radius: 5px;
+  } */
+  .promoTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .promoText {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  
+  .promoButton {
+    
+    font-size: 16px;    
+    /* font-weight: bold; */
+   
+    background-color: #1890ff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .promoButton:hover {
+    background-color: #40a9ff;
+  }

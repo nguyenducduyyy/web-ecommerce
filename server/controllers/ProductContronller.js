@@ -26,7 +26,10 @@ class ProductController {
     try {
       const product = await Product.findById(req.params.id);
       res.send({ product });
-    } catch {}
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
   }
 
   async editProduct(req, res) {
