@@ -1,41 +1,18 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  infoCompleted: {
-    type: Boolean,
-    default: false,
-  },
-  googleId: {
-    type: String,
-    unique: true,
-    sparse: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  // Các trường thông tin khác của người dùng
-  address: {
-    type: String,
-  
-  },
-  phone: {
-    type: String,
-   
-  },
-  name:{
-    type: String,
-   
-  }
+  infoCompleted: { type: Boolean, default: false },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: false },
+  createdAt: { type: Date, default: Date.now },
+  address: [{ type: String, required: false }],
+  phone: { type: String, required: false },
+  name: { type: String, required: true, unique: true },
+  picture: { type: String },
+  cart: [{
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    sizes: { type: Object, required: true },
+  }],
 });
 
 const User = mongoose.model('User', userSchema);

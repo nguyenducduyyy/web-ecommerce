@@ -1,7 +1,7 @@
 import React from "react";
 
 import banner1 from "../Img/Brown Minimalist Fashion Sale Banner.png";
-import banner2 from "./Thiết kế chưa có tên.png";
+import banner2 from "../Img/Thiết kế chưa có tên.png";
 import styles from "./css/Home.module.css";
 import { Carousel, Button } from "antd";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Row, Col, Card } from "antd";
 import axios from "axios";
-
+import FooterLayout from "./Layout/Footer";
 import {
   IoCartOutline,
   IoChatbubbleEllipsesOutline,
@@ -215,6 +215,7 @@ function Home() {
         </div>
       </div>
     </div>
+    
   );
 }
 

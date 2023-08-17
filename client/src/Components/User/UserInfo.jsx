@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, message, Select } from "antd";
+import { Form, Input, Button, message, Select, List, Modal } from "antd";
 import axios from "axios";
 
 const { Option } = Select;
@@ -9,7 +9,6 @@ const UserInfo = () => {
   const [userData, setUserData] = useState(null);
   const [formKey, setFormKey] = useState(1);
 
-  // xu ly các tỉnh thành
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -17,9 +16,10 @@ const UserInfo = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedWard, setSelectedWard] = useState("");
 
-
   const [showAdditionalAddress, setShowAdditionalAddress] = useState(false);
-  //
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [deleteAddressIndex, setDeleteAddressIndex] = useState(null);
+
   useEffect(() => {
     const fetchUserData = async () => {
       const storedUser = localStorage.getItem("user");
@@ -49,7 +49,6 @@ const UserInfo = () => {
   }, [userData]);
 
   useEffect(() => {
-    // Gọi API để lấy danh sách tỉnh/thành phố
     axios
       .get("https://provinces.open-api.vn/api/?depth=3")
       .then((response) => {
@@ -67,7 +66,6 @@ const UserInfo = () => {
     setSelectedWard("");
     setWards([]);
 
-    // Lấy danh sách quận/huyện của tỉnh/thành phố được chọn
     const selectedProvinceData = provinces.find(
       (province) => province.code === value
     );
@@ -81,7 +79,6 @@ const UserInfo = () => {
     setSelectedWard("");
     setWards([]);
 
-    // Lấy danh sách phường/xã của quận/huyện được chọn
     const selectedDistrictData = districts.find(
       (district) => district.code === value
     );
@@ -93,6 +90,34 @@ const UserInfo = () => {
   const handleAddAddress = () => {
     setShowAdditionalAddress(true);
   };
+
+  const handleDeleteAddress = (index) => {
+    setDeleteModalVisible(true);
+    setDeleteAddressIndex(index);
+  };
+
+  const confirmDeleteAddress = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/auth/user/${userData._id}/address/${deleteAddressIndex}/delete`
+      );
+  
+      if (response.status === 200) {
+        setUserData(response.data.user);
+        message.info("Xóa địa chỉ thành công!");
+      } else {
+        message.error("Đã xảy ra lỗi khi xóa địa chỉ");
+      }
+    } catch (error) {
+      console.error("Lỗi khi xóa địa chỉ:", error);
+      message.error("Đã xảy ra lỗi khi xóa địa chỉ");
+    }
+  
+    setDeleteModalVisible(false);
+    setDeleteAddressIndex(null);
+  };
+  
+  
 
   const handleFinish = async (values) => {
     setLoading(true);
@@ -117,7 +142,7 @@ const UserInfo = () => {
         userId: userData._id,
         updatedData: {
           ...otherValues,
-          address: fullAddress,
+          address:  fullAddress,
         },
       };
 
@@ -156,11 +181,6 @@ const UserInfo = () => {
         >
           <Input />
         </Form.Item>
-
-        <Form.Item>
-          <Button onClick={handleAddAddress}>Thêm địa chỉ mới</Button>
-        </Form.Item>
-
         <Form.Item
           name="phone"
           label="Số điện thoại"
@@ -168,14 +188,123 @@ const UserInfo = () => {
         >
           <Input />
         </Form.Item>
+        {userData && userData.address && userData.address.length > 0 && (
+          <Form.Item label="Danh sách địa chỉ">
+            <List
+              dataSource={userData.address}
+              renderItem={(address, index) => (
+                <List.Item>
+                  <span>{address}</span>
+                  <Button type="link" onClick={() => handleDeleteAddress(index)}>
+                    Xóa
+                  </Button>
+                </List.Item>
+              )}
+            />
+          </Form.Item>
+        )}
+        {showAdditionalAddress ? (
+          <>
+            <Form.Item
+              name="province"
+              label="Tỉnh/thành phố"
+              rules={[
+                { required: true, message: "Vui lòng chọn tỉnh/thành phố!" },
+              ]}
+            >
+              <Select
+                placeholder="Chọn quận/huyện"
+                onChange={handleProvinceChange}
+                value={selectedProvince}
+                style={{ width: 200 }}
+              >
+                {provinces.map((province) => (
+                  <Option key={province.code} value={province.code}>
+                    {province.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="district"
+              label="Quận/huyện"
+              rules={[{ required: true, message: "Vui lòng chọn quận/huyện!" }]}
+            >
+              <Select
+                placeholder="Chọn quận/huyện"
+                onChange={handleDistrictChange}
+                value={selectedDistrict}
+                style={{ width: 200 }}
+                disabled={!selectedProvince}
+              >
+                {districts.map((district) => (
+                  <Option key={district.code} value={district.code}>
+                    {district.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="ward"
+              label="Phường/xã"
+              rules={[{ required: true, message: "Vui lòng chọn phường/xã!" }]}
+            >
+              <Select
+                placeholder="Chọn phường/xã"
+                style={{ width: 200 }}
+                value={selectedWard}
+                onChange={setSelectedWard}
+                disabled={!selectedDistrict}
+              >
+                {wards.map((ward) => (
+                  <Option key={ward.code} value={ward.code}>
+                    {ward.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="homeAddress"
+              label="Địa chỉ tận nơi"
+              rules={[
+                { required: true, message: "Vui lòng nhập địa chỉ tận nơi!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item>
+              <Button onClick={() => setShowAdditionalAddress(false)}>
+                Hủy
+              </Button>
+            </Form.Item>
+          </>
+        ) : (
+          <Form.Item>
+            <Button onClick={handleAddAddress}>Thêm địa chỉ mới</Button>
+          </Form.Item>
+        )}
+
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>
             Lưu thông tin
           </Button>
         </Form.Item>
       </Form>
+
+      <Modal
+        title="Xóa địa chỉ"
+        visible={deleteModalVisible}
+        onOk={confirmDeleteAddress}
+        onCancel={() => setDeleteModalVisible(false)}
+      >
+        <p>Bạn có chắc chắn muốn xóa địa chỉ này?</p>
+      </Modal>
     </div>
   );
 };
 
+
+
 export default UserInfo;
+	

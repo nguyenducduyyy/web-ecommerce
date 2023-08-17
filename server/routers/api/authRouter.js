@@ -1,87 +1,49 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../../models/user');
+const User = require("../../models/user");
+const UserContronller =require("../../controllers/UserContronller")
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: '784111210562-4r267lej393cop44tp55omic0a8tvjbr.apps.googleusercontent.com',
-      clientSecret: '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',
-      callbackURL: 'http://localhost:5000/api/auth/google/callback',
-    },
-    (accessToken, refreshToken, profile, done) => {
-      // Kiểm tra xem người dùng đã tồn tại trong cơ sở dữ liệu hay chưa
-      User.findOne({ googleId: profile.id }, (err, user) => {
+// Route lưu trữ thông tin người dùng
+router.post("/google/login", (req, res) => {
+  console.log(req.body);
+  const { name, email, picture } = req.body;
+
+  // Kiểm tra xem người dùng đã tồn tại trong cơ sở dữ liệu chưa
+  User.findOne({ email: email }, (err, existingUser) => {
+    if (err) {
+      console.error("Lỗi khi tìm kiếm người dùng:", err);
+      return res.status(500).json({ error: "Đã xảy ra lỗi" });
+    }
+
+    if (existingUser) {
+      // Người dùng đã tồn tại trong cơ sở dữ liệu
+      // Thực hiện xử lý đăng nhập
+      // console.log(existingUser);
+      return res.status(200).json(existingUser);
+    } else {
+      // Người dùng chưa tồn tại trong cơ sở dữ liệu
+      // Tạo người dùng mới và lưu vào cơ sở dữ liệu
+      const newUser = new User({
+        name: name,
+        email: email,
+        picture: picture,
+        infoCompleted: false
+      });
+  
+      newUser.save((err) => {
         if (err) {
-          return done(err);
+          console.error("Lỗi khi lưu thông tin người dùng:", err);
+          return res.status(500).json({ error: "Đã xảy ra lỗi" });
         }
-
-        if (!user) {
-          // Người dùng chưa tồn tại trong cơ sở dữ liệu, tạo mới
-          const newUser = new User({
-            googleId: profile.id,
-            email: profile.emails[0].value,
-            name: profile.displayName,
-          });
-
-          newUser.save((err) => {
-            if (err) {
-              return done(err);
-            }
-            done(null, newUser);
-          });
-        } else {
-          // Người dùng đã tồn tại trong cơ sở dữ liệu
-          done(null, user);
-        }
+  
+        // Thực hiện xử lý đăng nhập
+      
+        return res.status(200).json(newUser);
       });
     }
-  )
-);
-
-passport.serializeUser((user, done) => {
-  done(null, user); // Serialize người dùng bằng cách truyền thông tin người dùng cho hàm done
-});
-
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
   });
 });
-
-router.get(
-  '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-
-// Xử lý callback sau khi đăng nhập thành công
-router.get(
-  '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
-    const { infoCompleted } = req.user;
-    console.log(req.user);
-    
-    const previousPageUrl = req.query.previous;
-    console.log(req.query.previous);
- 
-    if (infoCompleted) {
-      const previousPageUrl = req.query.previous || "/";
-    } else {
-      
-      res.redirect('http://localhost:3000/' + req.user.id);
-    }
-  },
-  (err, req, res, next) => {
-    console.error('Đăng nhập thất bại:', err);
-    res.status(500).send('Đăng nhập thất bại!');
-  }
-);
-
-// Route lưu trữ thông tin khách hàng
-
-
+router.get("/user/:id" ,UserContronller.getInfoUser )
+router.post("/user/update", UserContronller.updateUser)
+router.delete("/user/:id/address/:index/delete", UserContronller.deleteAddress); // Thêm tuyến đường xóa địa chỉ
 module.exports = router;

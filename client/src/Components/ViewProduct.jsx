@@ -14,6 +14,7 @@ import {
 } from "antd";
 import styles from "./css/ViewProduct.module.css";
 import { MinusCircleOutlined } from "@ant-design/icons";
+
 const { Option } = Select;
 
 function ViewProduct() {
@@ -63,8 +64,25 @@ function ViewProduct() {
 
   const handleAddToCart = () => {
     form.validateFields().then((values) => {
-      // Perform add to cart logic
-      // You can access selectedSizes and values.quantity here
+      const selectedProduct = {
+        productId: id,
+        sizes: selectedSizes,
+      };
+      const userJson = localStorage.getItem("user");
+      const user = JSON.parse(userJson);
+      const userId = user._id;
+      
+      console.log(userId);
+      console.log(selectedProduct);
+      axios
+        .post(`http://localhost:5000/api/cart/${userId}/add`, selectedProduct) // Thay đổi URL để gửi dữ liệu giỏ hàng cho user cụ thể
+        .then((response) => {
+          // Thực hiện chuyển hướng sau khi thêm sản phẩm thành công
+          // navigate("/cart");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     });
   };
 
@@ -136,7 +154,7 @@ function ViewProduct() {
                   </Form.Item>
                 </Col>
 
-                <Row gutter={[16, 16]} style={{ width: "100%", margin:0 , }}>
+                <Row gutter={[16, 16]} style={{ width: "100%", margin: 0 }}>
                   {Object.entries(selectedSizes).map(([sizeName, value]) => (
                     <React.Fragment key={sizeName}>
                       <Col span={8}>
@@ -189,16 +207,14 @@ function ViewProduct() {
                   ))}
                 </Row>
 
-                <Col span={24} style={{marginTop:16}}>
-                <Form.Item>
-                <Button type="primary" onClick={handleAddToCart}>
-                  Add to Cart
-                </Button>
-              </Form.Item>
-              </Col>  
+                <Col span={24} style={{ marginTop: 16 }}>
+                  <Form.Item>
+                    <Button type="primary" onClick={handleAddToCart}>
+                      Add to Cart
+                    </Button>
+                  </Form.Item>
+                </Col>
               </Row>
-                             
-              
             </Form>
           </Card>
         </Col>

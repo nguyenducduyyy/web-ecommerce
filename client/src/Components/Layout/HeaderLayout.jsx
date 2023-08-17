@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Layout, Row, Col, Button, Menu } from "antd";
+import React, { useState, useEffect } from "react";
+import { Layout, Row, Col, Button, Menu, Dropdown, Avatar } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import styles from "../css/Header.module.css";
@@ -9,7 +9,36 @@ const { Header } = Layout;
 function HeaderLayout() {
   const navigate = useNavigate();
   const [menuVisible, setMenuVisible] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Thêm state để xác định trạng thái đăng nhập
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedUser = localStorage.getItem("user");
+  
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          setIsLoggedIn(true); // Đánh dấu đã đăng nhập
+        } catch (error) {
+          console.error("Error parsing user data:", error);
+        }
+      } else {
+        setIsLoggedIn(false); // Đánh dấu chưa đăng nhập
+        setUser(null); // Xóa thông tin người dùng trong state
+      }
+    };
+  
+    handleStorageChange(); // Xử lý trạng thái ban đầu khi component được tạo (refresh trang)
+  
+    window.addEventListener("storage", handleStorageChange);
+  
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+  
 
   const handleUserClick = () => {
     setMenuVisible(!menuVisible);
@@ -20,7 +49,10 @@ function HeaderLayout() {
       navigate("/login");
     } else if (key === "register") {
       navigate("/register");
+    }else if (key === "user-info") {
+      navigate("/user-info");
     }
+
     setMenuVisible(false);
   };
 
@@ -29,14 +61,16 @@ function HeaderLayout() {
   };
 
   const handleLogout = () => {
-    // Xử lý đăng xuất ở đây
-    setIsLoggedIn(false);
+    localStorage.removeItem("user"); // Xóa thông tin người dùng khỏi local storage
+    setIsLoggedIn(false); // Đánh dấu chưa đăng nhập
+    setUser(null); // Xóa thông tin người dùng trong state
   };
 
+ 
   return (
-    <Layout>
-      <Header style={{ backgroundColor: "#fff" }}>
-        <Row align="middle">
+   
+      <Header style={{ backgroundColor: "#fff"  }}>
+        <Row align="middle" style={{alignItems:'stretch'}}>
           <Col flex={1}>
             <Link to="/" className={styles.logo}>
               Đây là Logo
@@ -73,22 +107,45 @@ function HeaderLayout() {
           <Col flex={1} style={{ textAlign: "right" }}>
             {isLoggedIn ? (
               <>
-                <span className={styles.menuItem}>Xin chào người dùng abc...</span>
-                <Menu
-                  onClick={handleMenuClick}
-                  style={{ position: "absolute", right: 0, zIndex: 4 }}
-                >
-                  <Menu.Item key="user-info">
-                    <Link to="/user" className={styles.menuItem}>
-                      Xem thông tin người dùng
-                    </Link>
-                  </Menu.Item>
-                  <Menu.Item key="logout">
-                    <span onClick={handleLogout} className={styles.menuItem}>
-                      Đăng xuất
-                    </span>
-                  </Menu.Item>
-                </Menu>
+                <div>
+                  <span style={{ marginRight: 14 }}>
+                    xin chào {user.name.split(" ")[0] + " ! "}{" "}
+                  </span>
+                  <Button
+                    shape="circle"
+                    icon={<ShoppingCartOutlined />}
+                    onClick={handleCartClick}
+                    style={{ marginRight: 5 }}
+                  />
+                  <span className="avatar-wrapper" onClick={handleUserClick}>
+                    {user?.picture ? (
+                      <Avatar src={user.picture} />
+                    ) : (
+                      <Avatar icon={<UserOutlined />} />
+                    )}
+                  </span>
+
+                  {menuVisible && (
+                    <Menu
+                      onClick={handleMenuClick}
+                      style={{ position: "absolute", right: 0, zIndex: 4 }}
+                    >
+                      <Menu.Item key="user-info">
+                        <Link to="/user-info" className={styles.menuItem}>
+                          Xem thong tin nguoi dung
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item key="order-info">
+                        <Link to="/order-info" className={styles.menuItem}>
+                          Xem don hang
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item key="logout" onClick={handleLogout}>
+                        <span className={styles.menuItem}>Đăng xuất</span>
+                      </Menu.Item>
+                    </Menu>
+                  )}
+                </div>
               </>
             ) : (
               <>
@@ -113,7 +170,11 @@ function HeaderLayout() {
                         Đăng nhập
                       </Link>
                     </Menu.Item>
-                    <Menu.Item key="register">Đăng ký</Menu.Item>
+                    <Menu.Item key="register">
+                      <Link to="/register" className={styles.menuItem}>
+                        Đăng ký
+                      </Link>
+                    </Menu.Item>
                   </Menu>
                 )}
               </>
@@ -121,7 +182,7 @@ function HeaderLayout() {
           </Col>
         </Row>
       </Header>
-    </Layout>
+    
   );
 }
 

@@ -1,7 +1,7 @@
 .container {
   display: flex;
   /* justify-content: space-between; Căn trái và phải */
-  align-items: center; /* Căn giữa theo chiều dọc */
+  /* Căn giữa theo chiều dọc */
   height: 100%;
   
 }
@@ -29,4 +29,13 @@
 .logo {
   font-size: 24px;
   text-decoration: none
+}
+
+.avatar-button .ant-avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-button .ant-avatar-image {
+  object-fit: cover;
 }
