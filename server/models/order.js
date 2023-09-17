@@ -15,6 +15,7 @@ const orderSchema = new mongoose.Schema({
         },
       ],
       totalBill: Number,
+      isReviewed: { type: Boolean, default: false },
     },
   ],
   totalBill: Number,

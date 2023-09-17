@@ -152,6 +152,8 @@ const UserInfo = () => {
       );
       setLoading(false);
       setUserData(response.data.user);
+
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       message.info("Lưu thông tin thành công!");
     } catch (error) {
       setLoading(false);

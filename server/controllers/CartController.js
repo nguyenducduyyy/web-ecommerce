@@ -102,6 +102,41 @@ class CartController {
       return res.status(500).json({ message: "Server error" });
     }
   }
+
+  async removeFromCart(req, res) {
+    try {
+      
+      const { userId } = req.params;
+      const { productId } = req.body;
+      console.log(productId);
+      // Tìm người dùng dựa trên userId
+      const user = await User.findById(userId);
+      console.log(user);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Tìm sản phẩm trong giỏ hàng của người dùng
+      const productIndex = user.cart.findIndex(
+        (item) => item.productId.toString() === productId
+      );
+
+      if (productIndex === -1) {
+        return res.status(404).json({ message: "Product not found in cart" });
+      }
+
+      // Xóa sản phẩm khỏi giỏ hàng của người dùng
+      user.cart.splice(productIndex, 1);
+
+      // Lưu thông tin người dùng sau khi xóa sản phẩm
+      await user.save();
+
+      return res.status(200).json({ message: "Product removed from cart" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  }
 }
 
 module.exports = new CartController();

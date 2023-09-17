@@ -1,12 +1,31 @@
 import React from "react";
-import { Form, Input, Button, Divider } from "antd";
+import { Form, Input, Button, Divider, message } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import "../css/Register.css";
+import { useState } from "react";
+import axios from 'axios';
 
 const Register = () => {
-  const handleRegister = (values) => {
-    // Xử lý logic đăng ký
-    console.log("Đăng ký:", values);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
+  const [form] = Form.useForm(); // Tạo form instance
+
+  const handleRegister = async (values) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/register', values);
+      if (response.status === 201) {
+        // Đăng ký thành công
+        setRegisterSuccess(true);
+        message.success('Đăng ký thành công');
+        form.resetFields(); // Đặt lại các trường trong form
+      } else {
+        // Đăng ký thất bại, hiển thị thông báo lỗi
+        message.error('Đăng ký thất bại: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('Đăng ký thất bại:', error);
+      // Xử lý lỗi và hiển thị thông báo lỗi cho người dùng
+      message.error('Đã xảy ra lỗi khi đăng ký');
+    }
   };
 
   const handleLogin = () => {
@@ -18,7 +37,8 @@ const Register = () => {
     <div className="register-container">
       <div className="register-form">
         <h2 className="register-title">Đăng ký</h2>
-        <Form onFinish={handleRegister}>
+        <Form form={form} onFinish={handleRegister}> {/* Sử dụng form instance */}
+          {/* ... Các trường form khác như trước ... */}
           <Form.Item
             name="name"
             rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
@@ -81,7 +101,6 @@ const Register = () => {
               className="input-field"
             />
           </Form.Item>
-
           <Form.Item>
             <Button
               type="primary"

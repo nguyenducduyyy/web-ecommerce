@@ -1,5 +1,6 @@
 const User = require("../models/user");
-
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 class UserContronller {
   async getInfoUser(req, res) {
     try {
@@ -101,7 +102,66 @@ class UserContronller {
     }
   }
   
+  async register(req, res) {
+    try {
+      const { name, email, password } = req.body;
+      
+      // // Băm mật khẩu trước khi lưu vào cơ sở dữ liệu
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
+      const newUser = new User({
+        name,
+        email,
+        password: hashedPassword, // Lưu hash mật khẩu
+      });
   
+  
+      // Lưu người dùng vào cơ sở dữ liệu
+      await newUser.save();
+
+     
+  
+      res.status(201).json({ message: 'Đăng ký thành công' });
+    } catch (error) {
+      if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+        // Lỗi trùng key email, email đã tồn tại
+        res.status(400).json({ message: 'Email đã tồn tại trong hệ thống' });
+      } else {
+        // Xử lý lỗi khác
+        console.error('Lỗi đăng ký:', error);
+        res.status(500).json({ message: 'Đăng ký thất bại' });
+      }
+    }
+  }
+
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+  
+      // Tìm người dùng trong cơ sở dữ liệu bằng email
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        // Người dùng không tồn tại, trả về lỗi
+        return res.status(401).json({ message: "Email hoặc mật khẩu không đúng" });
+      }
+  
+      // So sánh mật khẩu đã nhập với mật khẩu trong cơ sở dữ liệu
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
+  
+      if (!isPasswordMatch) {
+        // Mật khẩu không khớp, trả về lỗi
+        return res.status(401).json({ message: "Email hoặc mật khẩu không đúng" });
+      }
+  
+      
+      const token = jwt.sign({ userId: user._id }, "your-secret-key", { expiresIn: "1h" });
+      res.status(200).json({ token, user:user });
+    } catch (error) {
+      console.error("Lỗi đăng nhập:", error);
+      res.status(500).json({ message: "Đã xảy ra lỗi khi đăng nhập" });
+    }
+  }
 }
 
 module.exports = new UserContronller();

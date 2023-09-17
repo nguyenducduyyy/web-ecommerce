@@ -18,7 +18,8 @@ const productSchema = new mongoose.Schema({
   slug: { type: String, slug: 'name', unique: true },
   imageUrl: [{ type: String }],
   sizes: [sizeSchema],
-  total:{ type: Number}
+  total:{ type: Number},
+  
 }, { timestamps: true });
 
 const Product = mongoose.model('Product', productSchema);

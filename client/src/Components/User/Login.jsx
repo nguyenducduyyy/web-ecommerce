@@ -3,7 +3,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import React, { useState } from "react";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
-import { Form, Input, Button, Divider } from "antd";
+import { Form, Input, Button, Divider , message} from "antd";
 import { Link } from "react-router-dom";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "../css/Login.css";
@@ -12,9 +12,29 @@ import { useNavigate, useLocation } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
 
-  const handleLogin = (values) => {
-    // Xử lý logic đăng nhập
-    console.log("Đăng nhập:", values);
+  const handleLogin = async (values) => {
+    try {
+      // Gửi yêu cầu đăng nhập đến máy chủ
+      const response = await axios.post("http://localhost:5000/api/auth/login", values);
+
+      if (response.status === 200) {
+        // Đăng nhập thành công
+        message.success("Đăng nhập thành công");
+        console.log(response.data.user);
+        // Lưu thông tin người dùng vào local storage hoặc Redux state (tuỳ thuộc vào cách bạn quản lý trạng thái đăng nhập)
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        window.dispatchEvent(new Event("storage"));
+        // Chuyển đến trang chính hoặc trang sau khi đăng nhập thành công
+        navigate("/"); // Thay đổi thành đường dẫn mong muốn
+      } else {
+        // Đăng nhập thất bại, hiển thị thông báo lỗi
+        message.error("Đăng nhập thất bại: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Đăng nhập thất bại:", error);
+      // Xử lý lỗi và hiển thị thông báo lỗi cho người dùng
+      message.error("Đã xảy ra lỗi khi đăng nhập");
+    }
   };
 
   const handleRegister = () => {
@@ -45,6 +65,7 @@ const Login = () => {
         if (response.status === 200) {
           // Lưu thông tin người dùng vào local storage
           localStorage.setItem("user", JSON.stringify(response.data));
+          console.log(response.data);
           console.log("Lưu trên localStorage thành công");
 
           // Cập nhật lại trạng thái đăng nhập và thông tin người dùng trong phần header

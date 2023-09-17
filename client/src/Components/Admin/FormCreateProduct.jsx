@@ -1,12 +1,4 @@
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  Checkbox,
-  message,
-} from "antd";
+import {Form,Input,InputNumber,Button,Select,Checkbox,message} from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { Upload } from "antd";
@@ -20,7 +12,6 @@ function FormCreateProduct() {
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [sizes, setSizes] = useState(defaultSizes);
-  
 
   const handleImageChange = ({ fileList }) => {
     setFileList(fileList);
@@ -42,14 +33,14 @@ function FormCreateProduct() {
       fileList.forEach((file) => {
         formData.append("images", file.originFileObj);
       });
-      
-      const fileNames = fileList.map(file => file.name);
-      
+
+      const fileNames = fileList.map((file) => file.name);
+
       formData.append("data", JSON.stringify(data));
 
       console.log([...formData]);
-      await axios.post("http://localhost:5000/api/products/create",formData);
-console.log([...formData]);
+      await axios.post("http://localhost:5000/api/products/create", formData);
+      console.log([...formData]);
       message.success("Images uploaded successfully");
 
       form.resetFields();
@@ -134,12 +125,29 @@ console.log([...formData]);
           ]}
         >
           <Input placeholder="Product brand" />
+          {/* {showNewBrandInput ? ( // Hiển thị ô input khi trạng thái là true
+    <>
+      <Input
+        placeholder="Enter a new brand"
+        value={form.getFieldValue("newBrand")}
+        onChange={(e) => form.setFieldsValue({ newBrand: e.target.value })}
+        style={{ marginTop: "8px", width: "60%" }}
+      />
+      <Button onClick={handleAddNewBrand} style={{ marginLeft: "8px" }}>
+        Add New Brand
+      </Button>
+    </>
+  ) : (
+    <Button onClick={handleAddBrand} style={{ marginLeft: "8px" }}>
+      Add Brand
+    </Button>
+  )} */}
         </Form.Item>
 
         <Form.Item label="Size">
           {sizes.map((size) => (
             <Form.Item key={size} label={`${size} quantity`} name={size}>
-              <InputNumber min={0 } defaultValue={0}  />
+              <InputNumber min={0} defaultValue={0} />
             </Form.Item>
           ))}
           <Checkbox.Group

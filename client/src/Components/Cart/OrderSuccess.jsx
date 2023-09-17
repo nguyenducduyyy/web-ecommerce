@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Result, Button } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 
 function OrderSuccess() {
@@ -8,7 +9,7 @@ function OrderSuccess() {
     const orderData = JSON.parse(localStorage.getItem("orderData"));
 console.log("Thông tin đơn hàng từ localStorage:", orderData);
   },[])
-  
+  const navigate = useNavigate();
   return (
     <div className="order-success-container" style={{ height: "60vh",display:"flex", justifyContent:"center",alignItems:"center" }}>
       <Result
@@ -19,7 +20,9 @@ console.log("Thông tin đơn hàng từ localStorage:", orderData);
           <Button key="continue-shopping" type="primary">
             Tiếp tục mua sắm
           </Button>,
-          <Button key="view-orders">Xem đơn hàng</Button>,
+          <Button key="view-orders" 
+          onClick={() => navigate('/order-info')}
+          >Xem đơn hàng</Button>,
         ]}
       />
     </div>

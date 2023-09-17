@@ -8,14 +8,33 @@ const { getStorage, ref } = require("firebase/storage");
 const firebase = require("firebase/app");
 class ProductController {
   // Lấy danh sách sản phẩm
+  // async show(req, res) {
+  //   try {
+  //     Product.find({})
+  //       .then((products) => {
+  //         res.send({ products });
+  //       })
+  //       // .then(products => res.json(products))
+  //       .catch((err) => res.status(400).json({ error: err.message }));
+  //   } catch (error) {
+  //     console.log(error);
+  //     res.status(400).send(error);
+  //   }
+  // }
+
   async show(req, res) {
     try {
-      Product.find({})
-        .then((products) => {
-          res.send({ products });
-        })
-        // .then(products => res.json(products))
-        .catch((err) => res.status(400).json({ error: err.message }));
+      const currentPage = parseInt(req.query.page) || 1;
+      const productsPerPage = 10; // Số sản phẩm trên mỗi trang
+  
+      const totalProducts = await Product.countDocuments();
+      const totalPages = Math.ceil(totalProducts / productsPerPage);
+  
+      const products = await Product.find({})
+        .skip((currentPage - 1) * productsPerPage)
+        .limit(productsPerPage);
+  
+      res.send({ products, totalPages });
     } catch (error) {
       console.log(error);
       res.status(400).send(error);

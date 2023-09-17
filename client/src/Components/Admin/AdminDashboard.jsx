@@ -11,7 +11,8 @@ import { Routes, Route, Link, Outlet } from "react-router-dom";
 import ProductManagement from "./ProductManagement";
 import OrderManagement from "./OrderManagement";
 import EditProduct from "./EditProduct"
-import StatusSquare from "./StatusSquare";
+import SalesStatistics from "./SalesStatistics";
+import AdminChat from "./AdminChat";
 // axios test
 
 const { Header, Sider, Content } = Layout;
@@ -38,7 +39,10 @@ const Dashboard = () => {
             <Link to="quan-ly-don-hang">Quản lý đơn hàng</Link>
           </Menu.Item>
           <Menu.Item key="3" icon={<UploadOutlined />}>
-            <Link to="nav-3">Nav 3</Link>
+            <Link to="thong-ke">Thống kê</Link>
+          </Menu.Item>
+          <Menu.Item key="4" icon={<UploadOutlined />}>
+            <Link to="quan-ly-tin-nhan">Quản lý tin nhắn</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -70,7 +74,8 @@ const Dashboard = () => {
             <Route path="/quan-ly-san-pham/tao-moi-san-pham" element={<FormCreateProduct />}/>
             <Route path="/quan-ly-san-pham/:id/edit" element={<EditProduct />}/>
             <Route path="/quan-ly-don-hang" element={<OrderManagement />} />
-            <Route path="/test" element={<StatusSquare />} />
+            <Route path="/thong-ke" element={< SalesStatistics />} />
+            <Route path="/quan-ly-tin-nhan" element={<AdminChat/>} />
           </Routes>
 
           <Outlet />

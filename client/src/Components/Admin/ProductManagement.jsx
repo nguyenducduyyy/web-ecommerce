@@ -7,17 +7,30 @@ import { Modal } from 'antd';
 function ProductManagement() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10, // Số sản phẩm trên mỗi trang
+  });
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/products")
+    fetchData();
+  }, [pagination.current]); // Sử dụng pagination.current thay vì currentPage
+
+  const fetchData = () => {
+    axios.get(`http://localhost:5000/api/products?page=${pagination.current}`)
       .then((response) => {
         setProducts(response.data.products);
         setLoading(false);
+        setPagination({
+          ...pagination,
+          total: response.data.totalPages * pagination.pageSize,
+          // Bạn cần tính tổng số sản phẩm dựa trên số trang và số sản phẩm trên mỗi trang
+        });
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  };
 
   const handleDelete = (id) => {
     Modal.confirm({
@@ -30,7 +43,7 @@ function ProductManagement() {
         axios.delete(`http://localhost:5000/api/products/${id}`)
           .then((response) => {
             message.success("Product deleted successfully.");
-            setProducts(products.filter(product => product._id !== id));
+            fetchData(); // Sau khi xóa, làm mới dữ liệu
           })
           .catch((error) => {
             message.error("An error occurred while deleting the product.");
@@ -41,7 +54,7 @@ function ProductManagement() {
       },
     });
   };
-  
+
   const columns = [
     {
       title: "Tên sản phẩm",
@@ -94,6 +107,10 @@ function ProductManagement() {
     },
   ];
 
+  const handleTableChange = (pagination) => {
+    setPagination(pagination);
+  };
+
   return (
     <div>
       <h1>Product List</h1>
@@ -102,7 +119,13 @@ function ProductManagement() {
           Create Product
         </Button>
       </Link>
-      <Table columns={columns} dataSource={products} loading={loading} />
+      <Table
+        columns={columns}
+        dataSource={products}
+        loading={loading}
+        pagination={pagination}
+        onChange={handleTableChange} // Thêm sự kiện onChange để xử lý chuyển trang
+      />
     </div>
   );
 }

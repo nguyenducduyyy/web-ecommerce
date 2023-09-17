@@ -4,7 +4,7 @@
   
   .bannerImage {
     width: 100%;
-    max-height: 500px;
+    max-height: 700px;
     object-fit: cover;
     object-position: center;
   }
@@ -134,18 +134,25 @@
     background-color: #f5f5f5;
     padding: 40px;
     text-align: center;
-    background-color:cadetblue ;
+    /* cd */
     border-radius: 5px;
     margin-right: 20px;
+    background-image: url(../../Img/Black\ Modern\ Flash\ Sale\ Twitter\ Header.jpg);
+    background-size: cover;
+    background-position: center center;
   }
   
-  /* .secondSection {
+  .secondSection {
     flex: 1;
     background-color: #f5f5f5;
     padding: 40px;
     text-align: center;
     border-radius: 5px;
-  } */
+    background-image: url(../../Img/Black\ and\ White\ Minimalist\ Black\ Friday\ Banner.jpg);
+    background-size: cover;
+    background-position: center center;
+    min-height: 200px;
+  }
   .promoTitle {
     font-size: 24px;
     font-weight: bold;
@@ -174,3 +181,42 @@
   .promoButton:hover {
     background-color: #40a9ff;
   }
+
+  /* YourStyles.module.css */
+
+  .bannerFooter {
+    margin-top: 80px;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  
+  .bannerColumn {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .largeBanner {
+    width: 100%;
+    height: auto;
+  }
+  
+  .smallBannerColumn {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Cân bằng chiều cao của cột 2 */
+    margin-bottom: 20px;
+  }
+  
+  .smallBannerContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .smallBanner {
+    width: 100%;
+    height: auto;
+    margin-bottom: 8px; /* Khoảng cách giữa các ảnh nhỏ */
+  }
+  

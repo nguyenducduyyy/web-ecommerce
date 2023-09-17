@@ -43,6 +43,9 @@ router.post("/google/login", (req, res) => {
     }
   });
 });
+
+router.post("/register" ,UserContronller.register )
+router.post("/login" ,UserContronller.login )
 router.get("/user/:id" ,UserContronller.getInfoUser )
 router.post("/user/update", UserContronller.updateUser)
 router.delete("/user/:id/address/:index/delete", UserContronller.deleteAddress); // Thêm tuyến đường xóa địa chỉ

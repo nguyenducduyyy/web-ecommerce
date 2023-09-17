@@ -15,12 +15,12 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST" , "PUT" ,"DELETE"],
   },
 });
 
-app.set('socketio', io);
 
+app.set('socketio', io);
 
 app.use(bodyParser.json({ limit: "30mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "30mb" }));
@@ -41,6 +41,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 db.connect();
+
+
 
 routers(app);
 const PORT = process.env.port || 5000;

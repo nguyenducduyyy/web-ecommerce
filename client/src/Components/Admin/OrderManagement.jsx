@@ -4,7 +4,7 @@ import { Card, List, Avatar, Tag, Space, notification, Button } from "antd";
 import io from "socket.io-client";
 import moment from "moment";
 import "moment/locale/vi";
-import StatusSquare from "./StatusSquare";
+
 
   const socket = io.connect("http://localhost:5000");
   const statusColors = [
