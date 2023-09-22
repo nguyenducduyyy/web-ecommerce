@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.21c2a801.css",
+    "main.js": "/static/js/main.b51c1ef2.js",
+    "static/media/Grey Modern Coming Soon Banner (Landscape) .png": "/static/media/Grey Modern Coming Soon Banner (Landscape) .fcd9d3ee98fcba721ee9.png",
+    "static/media/Grey Minimalist Special Offer Banner Landscape.png": "/static/media/Grey Minimalist Special Offer Banner Landscape.ec29e0b1f7d1b4b73b7c.png",
+    "static/media/Thank You Banner Landscape.jpg": "/static/media/Thank You Banner Landscape.20cb901b8b2c08a042a7.jpg",
+    "static/media/Black Modern Flash Sale Twitter Header.jpg": "/static/media/Black Modern Flash Sale Twitter Header.d1fe06d24825ca2ccbf8.jpg",
+    "static/media/Black and White Minimalist Black Friday Banner.jpg": "/static/media/Black and White Minimalist Black Friday Banner.c52cec4163e056835e09.jpg",
+    "static/media/Main_Logo-removebg-preview (12).png": "/static/media/Main_Logo-removebg-preview (12).8c664e9a65cea6a5c56b.png",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/index.html",
+    "main.21c2a801.css.map": "/static/css/main.21c2a801.css.map",
+    "main.b51c1ef2.js.map": "/static/js/main.b51c1ef2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.21c2a801.css",
+    "static/js/main.b51c1ef2.js"
+  ]
+}
