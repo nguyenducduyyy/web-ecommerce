@@ -27,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:stage": "env-cmd -f ./.env.production npm run-script build"
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +50,7 @@
   },
   "devDependencies": {
     "css-loader": "^6.8.1",
+    "env-cmd": "^10.1.0",
     "style-loader": "^3.3.3",
     "webpack": "^5.85.0",
     "webpack-cli": "^5.1.1"
