@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button, message, Select, List, Modal } from "antd";
+import { Button, Form, Input, List, Modal, Select, message } from "antd";
 import axios from "axios";
-
+import React, { useEffect, useState } from "react";
+import CONFIG from "../../config";
 const { Option } = Select;
 
 const UserInfo = () => {
@@ -29,7 +29,7 @@ const UserInfo = () => {
 
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/auth/user/${parsedUser._id}`
+            `${CONFIG.API_URL}auth/user/${parsedUser._id}`
           );
           const { user } = response.data;
           setUserData(user);
@@ -99,7 +99,7 @@ const UserInfo = () => {
   const confirmDeleteAddress = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/auth/user/${userData._id}/address/${deleteAddressIndex}/delete`
+        `${CONFIG.API_URL}auth/user/${userData._id}/address/${deleteAddressIndex}/delete`
       );
   
       if (response.status === 200) {
@@ -147,7 +147,7 @@ const UserInfo = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/api/auth/user/update",
+        `${CONFIG.API_URL}auth/user/update`,
         updatedData
       );
       setLoading(false);

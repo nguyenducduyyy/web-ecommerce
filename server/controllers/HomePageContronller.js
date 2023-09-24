@@ -10,7 +10,7 @@ class HomePageContronller {
         .sort({ createdAt: -1 }) // Sắp xếp theo trường updatedAt giảm dần
         .limit(8) // Giới hạn chỉ trả về 8 sản phẩm
         .then((products) => {
-          console.log('a');
+          
           res.send({ products });
         })
         .catch((err) => res.status(400).json({ error: err.message }));

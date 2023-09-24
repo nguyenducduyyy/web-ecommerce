@@ -1,17 +1,19 @@
-import React from "react";
-import { Form, Input, Button, Divider, message } from "antd";
-import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
-import "../css/Register.css";
-import { useState } from "react";
+import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Divider, Form, Input, message } from "antd";
 import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import CONFIG from "../../config";
+import "../css/Register.css";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [registerSuccess, setRegisterSuccess] = useState(false);
   const [form] = Form.useForm(); // Tạo form instance
 
   const handleRegister = async (values) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', values);
+      const response = await axios.post(`${CONFIG.API_URL}auth/register`, values);
       if (response.status === 201) {
         // Đăng ký thành công
         setRegisterSuccess(true);
@@ -31,6 +33,7 @@ const Register = () => {
   const handleLogin = () => {
     // Chuyển đến trang đăng nhập
     console.log("Chuyển đến trang đăng nhập");
+    navigate(`/login`);
   };
 
   return (
@@ -112,7 +115,7 @@ const Register = () => {
           </Form.Item>
         </Form>
         <p className="register-link">
-          Đã có tài khoản? <a onClick={handleLogin}>Đăng nhập ngay</a>
+      Đã có tài khoản? <a onClick={handleLogin} style={{color:'#1677ff  '}}>Đăng nhập ngay</a>
         </p>
         <Divider />
       </div>

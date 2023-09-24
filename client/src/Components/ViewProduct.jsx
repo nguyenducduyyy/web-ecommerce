@@ -1,8 +1,11 @@
 import { MinusCircleOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Empty, Form, Image, Input, Rate, Row, Select, Typography, message } from 'antd';
 import axios from 'axios';
+import moment from 'moment';
+import 'moment/locale/vi';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import CONFIG from '../config';
 import styles from './css/ViewProduct.module.css';
 const { Option } = Select;
 const { Title, Text, Paragraph } = Typography;
@@ -17,10 +20,10 @@ function ViewProduct() {
   const [reviews, setReviews] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false); // State để kiểm soát sự hiển thị của modal
   const navigate = useNavigate();
-  
+
   React.useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/homepage/products/${id}`)
+      .get(`${CONFIG.API_URL}homepage/products/${id}`)
       .then((response) => {
         setProduct(response.data.product);
         setReviews(response.data.reviews);
@@ -31,7 +34,6 @@ function ViewProduct() {
         setLoading(false);
       });
   }, [id]);
-
 
   const handleSizeChange = (sizeName, quantity) => {
     const maxQuantity = product.sizes.find((size) => size.name === sizeName).quantity;
@@ -68,7 +70,7 @@ function ViewProduct() {
       console.log(userId);
       console.log(selectedProduct);
       axios
-        .post(`http://localhost:5000/api/cart/${userId}/add`, selectedProduct) // Thay đổi URL để gửi dữ liệu giỏ hàng cho user cụ thể
+        .post(`${CONFIG.API_URL}cart/${userId}/add`, selectedProduct) // Thay đổi URL để gửi dữ liệu giỏ hàng cho user cụ thể
         .then((response) => {
           // Thực hiện chuyển hướng sau khi thêm sản phẩm thành công
           // navigate("/cart");
@@ -85,7 +87,6 @@ function ViewProduct() {
     setIsModalVisible(true);
   };
 
- 
   const handleCloseChat = () => {
     setIsModalVisible(false); // Khi bạn đóng modal, ẩn modal đi
   };
@@ -95,10 +96,9 @@ function ViewProduct() {
     // Tùy thuộc vào yêu cầu của ứng dụng của bạn.
     // Ví dụ:
     console.log(product);
-    const productId = product._id
+    const productId = product._id;
     navigate(`/chat/${productId}`); // Chuyển đến giao diện chat
   };
-  
 
   if (loading) {
     return <p>Loading...</p>;
@@ -112,6 +112,8 @@ function ViewProduct() {
 
   const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
   const averageRating = totalRatings / reviews.length;
+
+  const reversedReviews = [...reviews].reverse();
   return (
     <div className={styles.product_inf}>
       <Row gutter={[16, 16]} className={styles.imageRow}>
@@ -134,7 +136,7 @@ function ViewProduct() {
         <Col span={14}>
           <Card className={styles.card}>
             <Title level={4}>{product.name}</Title>
-            <Paragraph style={{ fontSize: '16px', marginBottom: '8px' }}>Giá: {product.price} đ</Paragraph>
+            <Paragraph style={{ fontSize: '16px', marginBottom: '8px' }}>Giá: {product.price.toLocaleString('en-US')} đ</Paragraph>
             Đánh giá : <Rate disabled allowHalf value={averageRating} style={{ fontSize: '16px', marginBottom: '16px' }} />
             <Paragraph
               style={{
@@ -216,50 +218,46 @@ function ViewProduct() {
           </Card>
         </Col>
       </Row>
-
       <div className={styles.product_reviews}>
         <Title level={4} style={{ color: 'rgb(199, 128, 128)' }}>
           Đánh giá sản phẩm
         </Title>
         {reviews.length === 0 ? (
-          <Empty
-            description="Chưa có đánh giá nào về sản phẩm"
-            style={{ minHeight: '280px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          />
+           <Empty
+           description="Chưa có đánh giá nào về sản phẩm"
+           style={{ minHeight: '280px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+         />
         ) : (
-          <ul className={styles.reviewList}>
-            {reviews.map((review) => (
-              <li key={review._id} className={styles.reviewItem}>
+          <div className={styles.reviewList}>
+            {reversedReviews.map((review) => (
+              <div key={review._id} className={styles.reviewItem}>
                 <Row gutter={[16, 16]}>
                   <Col span={6}>
-                    <Avatar src={review.userId.picture} size={48} className={styles.avatar} />
+                    <Avatar src={review.userId.picture} size={32} className={styles.avatar} />
                     <Title level={5} className={styles.userName}>
                       {review.userId.name}
                     </Title>
+                    <Rate disabled allowHalf value={review.rating} className={styles.rating} />
                   </Col>
                   <Col span={18}>
                     <Row gutter={[16, 16]} style={{ rowGap: '8px' }}>
+                      
                       <Col span={24}>
-                        <Rate disabled allowHalf value={review.rating} className={styles.rating} />
-                        <Text className={styles.createdAt}>{review.createdAt}</Text>
+                      <Text className={styles.createdAt}>{moment(review.createdAt).locale('vi').format('DD/MM/YYYY - HH:mm')}</Text>
+                      <Paragraph className={styles.comment}>{review.comment}</Paragraph>
                       </Col>
-                      <Col span={24}>
-                        <Paragraph className={styles.comment}>{review.comment}</Paragraph>
-                      </Col>
+                      
                     </Row>
                   </Col>
                 </Row>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
+          
         )}
       </div>
-
       '<span className="ai-achievement"></span>'
-      
-      
     </div>
-    
   );
 }
 

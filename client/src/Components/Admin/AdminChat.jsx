@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, List, Avatar, Input, Button, notification, message } from 'antd';
+import { Avatar, Button, Col, Input, List, Row } from 'antd';
 import axios from 'axios';
-import '../../Components/css/AdminChat.css';
+import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-const socket = io.connect('http://localhost:5000');
+import '../../Components/css/AdminChat.css';
+import CONFIG from '../../config';
+const socket = io.connect(CONFIG.SOCKET_URL);
 const { TextArea } = Input;
 
 function AdminChat() {
@@ -14,7 +15,7 @@ function AdminChat() {
   const fetchMessage = async () => {
     try {
       axios
-        .get('http://localhost:5000/api/chat/admin/getMessages')
+        .get(`${CONFIG.API_URL}chat/admin/getMessages`)
         .then((response) => {
           const initialMessages = response.data;
           setMessages(initialMessages);
@@ -46,7 +47,7 @@ function AdminChat() {
   
   const handleSendMessage = () => {
     axios
-      .post('http://localhost:5000/api/chat/admin/sendMessage', {
+      .post(`${CONFIG.API_URL}chat/admin/sendMessage`, {
         text: newMessage,
         userId: selectedMessage.userId._id,
         sender: 'admin',

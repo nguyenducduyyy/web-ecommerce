@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Button, Card, Col, Image, Input, Row, Typography } from 'antd';
 import axios from 'axios';
-import { Row, Col, Card, Typography, Image, Input, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import CONFIG from '../../config';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -15,7 +16,7 @@ function UserChat() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/chat/${productId}`)
+      .get(`${CONFIG.API_URL}chat/${productId}`)
       .then((response) => {
         console.log(response.data);
         setProduct(response.data);
@@ -43,7 +44,7 @@ const userId = user._id;
 
     // Gửi tin nhắn lên server thông qua axios hoặc phương thức khác
     axios
-      .post(`http://localhost:5000/api/chat/user/${productId}/messages`, newMessage)
+      .post(`${CONFIG.API_URL}chat/user/${productId}/messages`, newMessage)
       .then((response) => {
         console.log('Tin nhắn quan tâm đã được gửi lên server');
         // Cập nhật danh sách tin nhắn
@@ -67,7 +68,7 @@ const userId = user._id;
     };
 
     axios
-      .post(`http://localhost:5000/api/chat/user/sendMessage`, messageData)
+      .post(`${CONFIG.API_URL}chat/user/sendMessage`, messageData)
       .then((response) => {
         // Tin nhắn đã được gửi thành công, cập nhật danh sách tin nhắn
         setMessages([...messages, { text: newMessage, sender: 'user', userId: userId }]);

@@ -1,13 +1,12 @@
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { GoogleLogin } from "@react-oauth/google";
-import React, { useState } from "react";
-import jwt_decode from "jwt-decode";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { Button, Divider, Form, Input, message } from "antd";
 import axios from "axios";
-import { Form, Input, Button, Divider , message} from "antd";
-import { Link } from "react-router-dom";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import jwt_decode from "jwt-decode";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import CONFIG from "../../config";
 import "../css/Login.css";
-import { useNavigate, useLocation } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,7 +14,7 @@ const Login = () => {
   const handleLogin = async (values) => {
     try {
       // Gửi yêu cầu đăng nhập đến máy chủ
-      const response = await axios.post("http://localhost:5000/api/auth/login", values);
+      const response = await axios.post(`${CONFIG.API_URL}auth/login`, values);
 
       if (response.status === 200) {
         // Đăng nhập thành công
@@ -59,7 +58,7 @@ const Login = () => {
     console.log("du lieu gui di", googleUser);
     // Gửi đối tượng user lên server
     axios
-      .post("http://localhost:5000/api/auth/google/login", googleUser)
+      .post(`${CONFIG.API_URL}auth/google/login`, googleUser)
       .then((response) => {
         // Xử lý phản hồi từ server sau khi gửi thành công
         if (response.status === 200) {

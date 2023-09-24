@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { DatePicker, List, Typography, Row, Col } from 'antd';
-import moment from 'moment';
+import { Col, DatePicker, List, Row, Typography } from 'antd';
 import axios from 'axios';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
   Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
+import CONFIG from '../../config';
 
 const { Title } = Typography;
 
@@ -30,7 +31,7 @@ function SalesStatistics() {
     try {
       const formattedDate = selectedDate.format('YYYY-MM-DD');
       const response = await axios.get(
-        `http://localhost:5000/api/statistics/sold-products/${formattedDate}`
+        `${CONFIG.API_URL}statistics/sold-products/${formattedDate}`
       );
       setSoldProducts(response.data);
     } catch (error) {

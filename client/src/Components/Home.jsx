@@ -60,7 +60,7 @@ function Home() {
     console.log(CONFIG);
     // gọi new prd
     axios
-      .get('http://localhost:5000/api/homepage')
+      .get(`${CONFIG.API_URL}homepage`)
       .then((response) => {
         setNewProducts(response.data.products);
         console.log(response.data.products);
@@ -72,7 +72,7 @@ function Home() {
 
     // gọi best selling
     axios
-      .get('http://localhost:5000/api/homepage/products/best-selling-products')
+      .get(`${CONFIG.API_URL}homepage/products/best-selling-products`)
       .then((response) => {
         setBestSellingProducts(response.data.bestSellingProducts);
         console.log(response.data.bestSellingProducts);
@@ -112,7 +112,7 @@ function Home() {
                   onClick={() => handleCardClick(product._id)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <Card.Meta title={product.name} description={`Giá: ${product.price}`} />
+                  <Card.Meta title={product.name} description={`Giá: ${product.price.toLocaleString("en-US")}`} />
 
                 </Card>
               </Col>
@@ -227,7 +227,7 @@ function Home() {
                 <div>
                   <h5 style={{ fontSize: '18px', color: '#333', marginTop: '20px' }}>{product.name}</h5>
                   <p style={{ color: '#666' }}>
-                    <strong>Giá:</strong> {product.price}
+                    <strong>Giá:</strong> {product.price.toLocaleString("en-US")}
                   </p>
                 </div>
               </div>

@@ -98,9 +98,9 @@ function HeaderLayout() {
                 Liên Hệ
               </Link>
             </Menu.Item>
-            <Menu.Item key="about">
-              <Link to="/about" className={styles.menuItem}>
-                Về chúng tôi
+            <Menu.Item key="order-info">
+              <Link to="/order-info" className={styles.menuItem}>
+                Quản lý đơn hàng
               </Link>
             </Menu.Item>
           </Menu>
@@ -110,7 +110,12 @@ function HeaderLayout() {
             <>
               <div>
                 <span style={{ marginRight: 14 }}>xin chào {user.name.split(' ')[0] + ' ! '} </span>
-                <Button shape="circle" icon={<ShoppingCartOutlined />} onClick={handleCartClick} style={{ marginRight: 5 }} />
+                <Button
+                  shape="circle"
+                  icon={<ShoppingCartOutlined />}
+                  onClick={handleCartClick}
+                  style={{ marginRight: 5, verticalAlign: 'middle' }}
+                />
                 <span className="avatar-wrapper" onClick={handleUserClick}>
                   {user?.picture ? <Avatar src={user.picture} /> : <Avatar icon={<UserOutlined />} />}
                 </span>
@@ -142,8 +147,6 @@ function HeaderLayout() {
                     </Menu.Item>
                   </Menu>
                 )}
-
-                
               </div>
             </>
           ) : (
@@ -151,7 +154,17 @@ function HeaderLayout() {
               <Button shape="circle" icon={<ShoppingCartOutlined />} onClick={handleCartClick} style={{ marginRight: 5 }} />
               <Button shape="circle" icon={<UserOutlined />} onClick={handleUserClick} />
               {menuVisible && (
-                <Menu onClick={handleMenuClick} style={{ position: 'absolute', right: 0, zIndex: 4 }}>
+                <Menu
+                  onClick={handleMenuClick}
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    zIndex: 4,
+                    border: '1px solid #ddd',
+                    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+                    borderRadius: '10px',
+                  }}
+                >
                   <Menu.Item key="login">
                     <Link to="/login" className={styles.menuItem}>
                       Đăng nhập

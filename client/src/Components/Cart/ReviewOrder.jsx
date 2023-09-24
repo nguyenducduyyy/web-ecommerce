@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation  } from 'react-router-dom';
+import { Button, Form, Input, List, Modal, Rate, notification } from 'antd';
 import axios from 'axios';
-import { Rate, List, Modal, Button, Input, Form ,notification} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import CONFIG from '../../config';
 
 const { TextArea } = Input;
 
@@ -22,16 +23,14 @@ function ReviewOrder() {
   useEffect(() => {
     // Gọi API để lấy danh sách các sản phẩm trong đơn hàng
     axios
-      .get(`http://localhost:5000/api/orders/reviews/${orderId}`)
+      .get(`${CONFIG.API_URL}orders/reviews/${orderId}`)
       .then((response) => {
         // Lấy danh sách sản phẩm từ JSON response và cập nhật state
         setProducts(response.data.products);
         console.log(response.data.products);
 
         // Kiểm tra và lọc ra các sản phẩm đã được đánh giá
-        const reviewedProductIds = response.data.products
-          .filter((product) => product.isReviewed)
-          .map((product) => product.productId);
+        const reviewedProductIds = response.data.products.filter((product) => product.isReviewed).map((product) => product.productId);
 
         setReviewedProducts(reviewedProductIds);
       })
@@ -72,7 +71,7 @@ function ReviewOrder() {
     };
 
     axios
-      .post('http://localhost:5000/api/orders/reviews', reviewData)
+      .post(`${CONFIG.API_URL}orders/reviews`, reviewData)
       .then((response) => {
         notification.success({
           message: 'Thành công',
@@ -119,7 +118,7 @@ function ReviewOrder() {
                 <div>
                   <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333' }}>{product.name}</h3>
                   <p style={{ color: '#666' }}>
-                    <strong>Giá:</strong> ${product.price}
+                    <strong>Giá:</strong> {product.price.toLocaleString('en-US')}
                   </p>
                   <p style={{ color: '#666' }}>
                     <strong>Số lượng:</strong> {product.sizeAndQuantitySizeWant[0].quantity}
@@ -143,15 +142,9 @@ function ReviewOrder() {
           )}
         />
       </div>
-      
-                    
+
       {/* Modal đánh giá */}
-      <Modal
-        title="Đánh giá sản phẩm"
-        visible={isModalVisible}
-        onOk={handleReviewSubmit}
-        onCancel={() => setIsModalVisible(false)}
-      >
+      <Modal title="Đánh giá sản phẩm" visible={isModalVisible} onOk={handleReviewSubmit} onCancel={() => setIsModalVisible(false)}>
         <Form>
           <Form.Item label="Xếp hạng">
             <Rate allowHalf defaultValue={0} onChange={handleRateChange} value={rating} />

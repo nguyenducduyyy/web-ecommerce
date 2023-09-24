@@ -2,6 +2,7 @@ import { Button, Checkbox, Form, Input, InputNumber, Upload, message } from "ant
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import CONFIG from "../../config";
 
 function EditProduct() {
   const [form] = Form.useForm();
@@ -15,7 +16,7 @@ function EditProduct() {
   const [sizeQuantities, setSizeQuantities] = useState({});
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/products/${id}/edit`) // Sử dụng `id` để truy vấn sản phẩm cần sửa đổi
+      .get(`${CONFIG.API_URL}products/${id}/edit`) // Sử dụng `id` để truy vấn sản phẩm cần sửa đổi
       .then((response) => {
         setProduct(response.data.productById);
 
@@ -111,7 +112,7 @@ function EditProduct() {
       console.log(deletedImageUrls);
       console.log([...formData]);
       await axios.put(
-        `http://localhost:5000/api/products/${id}/update`,
+        `${CONFIG.API_URL}products/${id}/update`,
         formData,
         {
           headers: {

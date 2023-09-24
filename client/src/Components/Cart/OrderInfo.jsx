@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Modal, Button, notification ,Empty } from 'antd';
-import { Row, Col, Card } from 'antd';
-import { Link } from 'react-router-dom';
 import { SmallDashOutlined } from '@ant-design/icons';
-import { IoCartOutline, IoChatbubbleEllipsesOutline, IoRefreshOutline, IoLockClosedOutline } from 'react-icons/io5';
-import styles from '../css/Home.module.css';
+import { Button, Card, Col, Empty, Modal, Row, notification } from 'antd';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { IoCartOutline, IoChatbubbleEllipsesOutline, IoLockClosedOutline, IoRefreshOutline } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 
+import moment from 'moment';
+import 'moment/locale/vi';
+import CONFIG from '../../config';
 import '../css/OrderInfo.css';
-
 const orderStatuses = [
   'Chờ xác nhận',
   'Đã xác nhận',
@@ -32,7 +32,7 @@ function OrderInfo() {
   useEffect(() => {
     // Gọi API để lấy danh sách các đơn hàng của người dùng
     axios
-      .get(`http://localhost:5000/api/orders/${userId}`)
+      .get(`${CONFIG.API_URL}orders/${userId}`)
       .then((response) => {
         setOrders(response.data);
       })
@@ -63,7 +63,7 @@ function OrderInfo() {
     // Thực hiện logic hủy đơn hàng ở đây, có thể gửi yêu cầu đến máy chủ
     // để cập nhật trạng thái đơn hàng và xử lý các tác vụ khác liên quan đến hủy đơn hàng.
     axios
-      .post('http://localhost:5000/api/orders/cancel', { orderId: order._id })
+      .post(`${CONFIG.API_URL}orders/cancel`, { orderId: order._id })
       .then((response) => {
         // Xử lý kết quả từ máy chủ (nếu cần)
         console.log(response.data.message);
@@ -78,12 +78,10 @@ function OrderInfo() {
         console.error(error);
       });
   };
-
-  const handleRateOrder = (order) => {
-    // Thực hiện logic đánh giá đơn hàng ở đây, có thể mở form đánh giá,
-    // gửi yêu cầu đến máy chủ để lưu đánh giá, và xử lý các tác vụ khác
-    // liên quan đến đánh giá đơn hàng.
-  };
+  const sortedOrders = [...selectedOrders].sort((a, b) => {
+    // Sắp xếp đơn hàng theo thời gian tạo từ mới đến cũ
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
 
   return (
     <div>
@@ -119,7 +117,7 @@ function OrderInfo() {
          <Empty description={<span>Không có đơn hàng nào trong trạng thái đã chọn.</span>} />
        </div>
         ) : (
-          selectedOrders.map((order) => (
+          sortedOrders.map((order) => (
             <div
               key={order._id}
               style={{
@@ -153,7 +151,7 @@ function OrderInfo() {
                       {order.cartItems[0].name}
                     </p>
                     <p style={{ color: '#666' }}>
-                      <strong>Giá:</strong> {order.cartItems[0].price} đ
+                      <strong>Giá:</strong> {order.cartItems[0].price.toLocaleString('en-US')} 
                     </p>
                     <p style={{ color: '#666' }}>
                       <strong>Số lượng:</strong> {order.cartItems[0].sizeAndQuantitySizeWant[0].quantity}
@@ -171,7 +169,7 @@ function OrderInfo() {
                 >
                   <p style={{ fontSize: '16px', color: '#444' }}>Tổng tiền thanh toán: {order.totalBill} đ</p>
                   <p style={{ fontSize: '16px', color: '#444' }}>Trạng thái: {order.status}</p>
-                  <p style={{ fontSize: '14px', color: '#888' }}>Ngày tạo: {order.createdAt}</p>
+                  <p style={{ fontSize: '14px', color: '#888' }}>Ngày tạo: {moment(order.createdAt).locale('vi').format('DD/MM/YYYY - HH:mm')}</p>
 
                   <div>
                     <Button type="primary" onClick={() => showOrderDetails(order)} style={{ marginTop: '15px' }}>
@@ -190,7 +188,7 @@ function OrderInfo() {
 
                     {order.status === 'Hoàn tất' && (
                        <Link to={`/review?orderId=${order._id}`} key={order._id}>
-                       <Button  danger style={{ marginTop: '15px' ,marginLeft:'15px'}}>
+                       <Button   style={{ marginTop: '15px' ,marginLeft:'15px'}}>
                          Đánh giá
                        </Button>
                      </Link>
@@ -214,25 +212,25 @@ function OrderInfo() {
       </div>
 
       {/* Modal hiển thị chi tiết đơn hàng */}
-      <Modal title="Order Details" visible={!!selectedOrder} onCancel={closeModal} footer={null} width={1000}>
+      <Modal title="Thông tin đơn hàng" visible={!!selectedOrder} onCancel={closeModal} footer={null} width={1000}>
         {selectedOrder && (
           <div>
-            <h4>Thông tin đơn hàng</h4>
+            
 
             <p>
-              <strong>Order ID:</strong> {selectedOrder._id}
+              <strong> ID:</strong> {selectedOrder._id}
             </p>
             <p>
-              <strong>Total Bill:</strong> {selectedOrder.totalBill}
+              <strong>Tổng tiền:</strong> {selectedOrder.totalBill.toLocaleString('en-US')}
             </p>
             <p>
-              <strong>Selected Address:</strong> {selectedOrder.selectedAddress}
+              <strong>Địa chỉ người nhận:</strong> {selectedOrder.selectedAddress}
             </p>
             <p>
-              <strong>Payment Method:</strong> {selectedOrder.paymentMethod}
+              <strong>Phương thức thanh toán:</strong> {selectedOrder.paymentMethod}
             </p>
             <p>
-              <strong>Status:</strong> {selectedOrder.status}
+              <strong>Trạng thái:</strong> {selectedOrder.status}
             </p>
 
             <h4>Sản phẩm trong đơn hàng</h4>
@@ -253,7 +251,7 @@ function OrderInfo() {
                     <strong>Tên sản phẩm:</strong> {item.name}
                   </p>
                   <p>
-                    <strong>Giá:</strong> {item.price}
+                    <strong>Giá:</strong> {item.price.toLocaleString('en-US')}
                   </p>
                   <p>
                     <strong>Số lượng:</strong> {item.sizeAndQuantitySizeWant[0].quantity}

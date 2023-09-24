@@ -1,6 +1,7 @@
 import { Button, Checkbox, Form, Input, InputNumber, Select, Upload, message } from "antd";
 import axios from "axios";
 import { useState } from "react";
+import CONFIG from "../../config";
 
 const defaultSizes = ["S", "M", "L", "XL", "XXL"];
 
@@ -38,7 +39,7 @@ function FormCreateProduct() {
       formData.append("data", JSON.stringify(data));
 
       console.log([...formData]);
-      await axios.post("http://localhost:5000/api/products/create", formData);
+      await axios.post(`${CONFIG.API_URL}products/create`, formData);
       console.log([...formData]);
       message.success("Images uploaded successfully");
 

@@ -1,181 +1,80 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button, message, Select } from "antd";
-import axios from "axios";
+import { Button, Col, Form, Input, Row, Typography } from 'antd';
+import React from 'react';
+import banner6 from '../Img/Off White Gold Modern Minimal Floral Zoom Virtual Background.png';
 
-const { Option } = Select;
+const { Title } = Typography;
 
-const UserInfo = () => {
-  const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState(null);
-  const [formKey, setFormKey] = useState(1);
-
-  // xu ly các tỉnh thành
-  const [provinces, setProvinces] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
-  const [selectedProvince, setSelectedProvince] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [selectedWard, setSelectedWard] = useState("");
-
-
-  const [showAdditionalAddress, setShowAdditionalAddress] = useState(false);
-  //
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const storedUser = localStorage.getItem("user");
-
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-
-        try {
-          const response = await axios.get(
-            `http://localhost:5000/api/auth/user/${parsedUser._id}`
-          );
-          const { user } = response.data;
-          setUserData(user);
-        } catch (error) {
-          console.error("Lỗi khi lấy thông tin người dùng:", error);
-        }
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
-    if (userData) {
-      setFormKey((prevKey) => prevKey + 1);
-    }
-  }, [userData]);
-
-  useEffect(() => {
-    // Gọi API để lấy danh sách tỉnh/thành phố
-    axios
-      .get("https://provinces.open-api.vn/api/?depth=3")
-      .then((response) => {
-        setProvinces(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  const handleProvinceChange = (value) => {
-    setSelectedProvince(value);
-    setSelectedDistrict("");
-    setDistricts([]);
-    setSelectedWard("");
-    setWards([]);
-
-    // Lấy danh sách quận/huyện của tỉnh/thành phố được chọn
-    const selectedProvinceData = provinces.find(
-      (province) => province.code === value
-    );
-    if (selectedProvinceData && selectedProvinceData.districts) {
-      setDistricts(selectedProvinceData.districts);
-    }
+const Contact = () => {
+  const onFinish = (values) => {
+    console.log('Received values:', values);
   };
 
-  const handleDistrictChange = (value) => {
-    setSelectedDistrict(value);
-    setSelectedWard("");
-    setWards([]);
-
-    // Lấy danh sách phường/xã của quận/huyện được chọn
-    const selectedDistrictData = districts.find(
-      (district) => district.code === value
-    );
-    if (selectedDistrictData && selectedDistrictData.wards) {
-      setWards(selectedDistrictData.wards);
-    }
-  };
-
-  const handleAddAddress = () => {
-    setShowAdditionalAddress(true);
-  };
-
-  const handleFinish = async (values) => {
-    setLoading(true);
-
-    const { homeAddress, ...otherValues } = values;
-
-    const selectedProvinceData = provinces.find(
-      (province) => province.code === selectedProvince
-    );
-    const selectedDistrictData = districts.find(
-      (district) => district.code === selectedDistrict
-    );
-    const selectedWardData = wards.find((ward) => ward.code === selectedWard);
-
-    const fullAddress = `${homeAddress} / ${selectedWardData?.name || ""} / ${
-      selectedDistrictData?.name || ""
-    } / ${selectedProvinceData?.name || ""}`;
-    console.log(fullAddress);
-
-    try {
-      const updatedData = {
-        userId: userData._id,
-        updatedData: {
-          ...otherValues,
-          address: fullAddress,
-        },
-      };
-
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/user/update",
-        updatedData
-      );
-      setLoading(false);
-      setUserData(response.data.user);
-      message.info("Lưu thông tin thành công!");
-    } catch (error) {
-      setLoading(false);
-      console.error("Lỗi khi cập nhật thông tin người dùng:", error);
-    }
+  const divStyle = {
+    padding: '20px',
+    minHeight: '600px',
+    padding: '5%',
+    // backgroundColor: 'white',
+    marginLeft: '5%',
+    marginRight: '5%',
+    marginTop: '3%',
+    backgroundImage: `url("${banner6}")`, // Đặt hình ảnh làm background
+    backgroundSize: 'cover',
+    backgroundPosition: 'center', // Đảm bảo hình ảnh bao phủ toàn bộ nền
   };
 
   return (
-    <div style={{ width: 400, margin: "0 auto", marginTop: 100 }}>
-      <h2>Thông tin người dùng</h2>
+    <div style={divStyle}>
+      <Title style={{ marginLeft: '16%' }}>
+        <h4 >Thông Tin Liên Hệ</h4>
+      </Title>
+      <Row gutter={[16, 16]}>
+        <Col span={12}>
+          <Form name="contact-form" onFinish={onFinish} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+            <Form name="contact-form" onFinish={onFinish} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+              <Form.Item label="Tên" name="name" rules={[{ required: true, message: 'Please enter your name!' }]}>
+                <Input />
+              </Form.Item>
 
-      <Form key={formKey} onFinish={handleFinish} initialValues={userData}>
-        <Form.Item
-          name="name"
-          label="Họ và tên"
-          rules={[{ required: true, message: "Vui lòng nhập họ và tên!" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="email"
-          label="Email"
-          rules={[
-            { required: true, message: "Vui lòng nhập địa chỉ email!" },
-            { type: "email", message: "Địa chỉ email không hợp lệ!" },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  { required: true, message: 'Please enter your email!' },
+                  { type: 'email', message: 'Invalid email format' },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
-        <Form.Item>
-          <Button onClick={handleAddAddress}>Thêm địa chỉ mới</Button>
-        </Form.Item>
+              <Form.Item label="Góp ý" name="message" rules={[{ required: true, message: 'Please enter your message!' }]}>
+                <Input.TextArea rows={4} />
+              </Form.Item>
 
-        <Form.Item
-          name="phone"
-          label="Số điện thoại"
-          rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Lưu thông tin
-          </Button>
-        </Form.Item>
-      </Form>
+              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Button type="primary" htmlType="submit">
+                  Gửi
+                </Button>
+              </Form.Item>
+            </Form>
+          </Form>
+        </Col>
+        <Col span={12}>
+          <div>
+            <Title level={4}>Contact Information</Title>
+            <p>
+              <strong>Địa chỉ:</strong> 39/14 /Quang Trung / Hà Đông /Hà Nội
+            </p>
+            <p>
+              <strong>Email:</strong> Ddduy0410@gmail.com
+            </p>
+            <p>
+              <strong>Phone:</strong> 0904944102
+            </p>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };
 
-export default UserInfo;
+export default Contact;

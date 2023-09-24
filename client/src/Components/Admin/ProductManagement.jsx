@@ -2,6 +2,7 @@ import { Button, Modal, Space, Table, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import CONFIG from "../../config";
 
 function ProductManagement() {
   const [products, setProducts] = useState([]);
@@ -16,7 +17,7 @@ function ProductManagement() {
   }, [pagination.current]); // Sử dụng pagination.current thay vì currentPage
 
   const fetchData = () => {
-    axios.get(`http://localhost:5000/api/products?page=${pagination.current}`)
+    axios.get(`${CONFIG.API_URL}products?page=${pagination.current}`)
       .then((response) => {
         setProducts(response.data.products);
         setLoading(false);
@@ -39,7 +40,7 @@ function ProductManagement() {
       okType: 'danger',
       cancelText: 'Đóng',
       onOk: () => {
-        axios.delete(`http://localhost:5000/api/products/${id}`)
+        axios.delete(`${CONFIG.API_URL}products/${id}`)
           .then((response) => {
             message.success("Product deleted successfully.");
             fetchData(); // Sau khi xóa, làm mới dữ liệu

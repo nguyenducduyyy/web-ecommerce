@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
+import CONFIG from '../../config';
 
 const AddInfoPage = () => {
   const [phone, setPhone] = useState('');
@@ -10,7 +11,7 @@ const AddInfoPage = () => {
 
     // Gửi yêu cầu POST đến server
     axios
-      .post('http://localhost:5000/api/auth/user/customer-info', { phone, address })
+      .post(`${CONFIG.API_URL}auth/user/customer-info`, { phone, address })
       .then((response) => {
         // Xử lý kết quả từ server
         console.log(response.data); // Log dữ liệu từ server

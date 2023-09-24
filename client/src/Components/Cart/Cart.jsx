@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { Modal, Button, Empty, Table, message } from 'antd';
+import { Button, Card, Col, Empty, Modal, Radio, Row, Select, Table, message } from 'antd';
 import axios from 'axios';
-import { Row, Col, Card, Image, Select, Radio } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../../Components/css/Cart.css';
-import moment from 'moment';
+import CONFIG from '../../config';
 
 const { Option } = Select;
 
@@ -50,7 +49,7 @@ const Cart = () => {
       const userId = user._id;
 
       axios
-        .get(`http://localhost:5000/api/cart/${userId}/get`)
+        .get(`${CONFIG.API_URL}cart/${userId}/get`)
         .then((response) => {
           setCartItems(response.data.cartItems);
           setTotalBill(response.data.totalBill);
@@ -156,7 +155,7 @@ const Cart = () => {
 
     // Gửi yêu cầu xóa sản phẩm từ giỏ hàng đến máy chủ
     axios
-      .delete(`http://localhost:5000/api/cart/${user._id}/remove`, {
+      .delete(`${CONFIG.API_URL}cart/${user._id}/remove`, {
         data: { productId }, // Sử dụng productId để xác định sản phẩm cần xóa
       })
       .then((response) => {
@@ -192,7 +191,7 @@ const Cart = () => {
         orderType: 'normal',
       };
 
-      const response = await axios.post('http://localhost:5000/api/payment/create_payment_url', paymentData);
+      const response = await axios.post(`${CONFIG.API_URL}payment/create_payment_url`, paymentData);
       return response.data.paymentUrl; // Trả về URL để chuyển hướng người dùng
     } catch (error) {
       console.error('Lỗi xử lý thanh toán:', error);
@@ -204,7 +203,7 @@ const Cart = () => {
     try {
       // Gửi thông tin đơn hàng lên server để admin xử lý
 
-      const response = await axios.post('http://localhost:5000/api/orders/create', orderData);
+      const response = await axios.post(`${CONFIG.API_URL}orders/create`, orderData);
     } catch (error) {
       console.error(error);
       message.error('Đã có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.');
@@ -326,45 +325,46 @@ const Cart = () => {
                         ))}
                       </Select>
                     </div>
-                    <div style={{marginTop:'16px'}}>
-
-                    <Link to="/user-info" className="edit-link">
-                      Chỉnh sửa thông tin người dùng
-                    </Link>
+                    <div style={{ marginTop: '16px' }}>
+                      <Link to="/user-info" className="edit-link">
+                        Sửa
+                      </Link>
                     </div>
                   </Card>
                 </Col>
               </Row>
               <Row style={{ marginTop: '36px' }}>
-                <Col span={12}>
+                <Col span={24}>
                   <Card>
-                    <h4>Chọn phương thức thanh toán</h4>
-                    <div>
-                      <Radio checked={paymentOption === 'cash'} onChange={() => handlePaymentOptionChange('cash')}>
-                        Thanh toán bằng tiền mặt
-                      </Radio>
-                    </div>
-                    <div>
-                      <Radio checked={paymentOption === 'vnpay'} onChange={() => handlePaymentOptionChange('vnpay')}>
-                        Thanh toán qua VNPay
-                      </Radio>
-                    </div>
-                  </Card>
-                </Col>
-                <Col span={12}>
-                  <Card>
-                    <h4
-                      style={{
-                        fontSize: '24px',
-                        fontWeight: 'bold',
-                        marginBottom: '16px',
-                      }}
-                    >
-                      Tổng bill: {totalBill.toLocaleString()} đ
-                    </h4>{' '}
-                    <Button type="primary" onClick={handlePlaceOrder}>
-                      Đặt đơn hàng
-                    </Button>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <h4>Chọn phương thức thanh toán</h4>
+                        <div>
+                          <Radio checked={paymentOption === 'cash'} onChange={() => handlePaymentOptionChange('cash')}>
+                            Thanh toán khi nhận hàng
+                          </Radio>
+                        </div>
+                        <div>
+                          <Radio checked={paymentOption === 'vnpay'} onChange={() => handlePaymentOptionChange('vnpay')}>
+                            Thanh toán qua VNPay
+                          </Radio>
+                        </div>
+                      </Col>
+                      <Col span={12}>
+                        <h4
+                          style={{
+                            fontSize: '24px',
+                            fontWeight: 'bold',
+                            marginBottom: '16px',
+                          }}
+                        >
+                          Tổng bill: {totalBill.toLocaleString()} đ
+                        </h4>
+                        <Button type="primary" onClick={handlePlaceOrder}>
+                          Đặt đơn hàng
+                        </Button>
+                      </Col>
+                    </Row>
                   </Card>
                 </Col>
               </Row>
