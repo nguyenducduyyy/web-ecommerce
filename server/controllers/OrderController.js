@@ -1,7 +1,7 @@
 const Order = require("../models/order");
 const User = require("../models/user");
 const Product = require("../models/product");
-const SaleStatistics = require("../models/SaleStatistics");
+const SaleStatistics = require("../models/saleStatistics");
 const Review = require("../models/review")
 class OrderController {
   async createOrder(req, res) {

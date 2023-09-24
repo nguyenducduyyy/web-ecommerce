@@ -1,4 +1,4 @@
-const SaleStatistics = require('../models/SaleStatistics'); 
+const SaleStatistics = require('../models/saleStatistics'); 
 const Product = require("../models/product");
 
 class StatisticsController { 

@@ -1,6 +1,6 @@
 const Product = require("../models/product");
-// const SaleStatistics = require("../models/saleStatistics");
-const SaleStatistics = require("../models/SaleStatistics");
+const SaleStatistics = require("../models/saleStatistics");
+
 const Review = require("../models/review")
 const unidecode = require("unidecode");
 class HomePageContronller {
