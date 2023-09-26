@@ -65,10 +65,16 @@ function ViewProduct() {
       };
       const userJson = localStorage.getItem('user');
       const user = JSON.parse(userJson);
-      const userId = user._id;
+      const userId = user ? user._id : null;
 
-      console.log(userId);
-      console.log(selectedProduct);
+      if (!userId) {
+        // Người dùng chưa đăng nhập, hiển thị thông báo và chuyển đến trang đăng nhập
+        message.warning('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+        navigate('/login'); // Chuyển đến trang đăng nhập
+        return; // Dừng xử lý tiếp theo
+      }
+
+      
       axios
         .post(`${CONFIG.API_URL}cart/${userId}/add`, selectedProduct) // Thay đổi URL để gửi dữ liệu giỏ hàng cho user cụ thể
         .then((response) => {

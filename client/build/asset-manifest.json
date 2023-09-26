@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.e3d98bc5.css",
-    "main.js": "/static/js/main.3df5944c.js",
+    "main.css": "/static/css/main.1703518f.css",
+    "main.js": "/static/js/main.d8e3faf1.js",
     "static/media/Grey Modern Coming Soon Banner (Landscape) .png": "/static/media/Grey Modern Coming Soon Banner (Landscape) .fcd9d3ee98fcba721ee9.png",
     "static/media/Grey Minimalist Special Offer Banner Landscape.png": "/static/media/Grey Minimalist Special Offer Banner Landscape.ec29e0b1f7d1b4b73b7c.png",
     "static/media/Thank You Banner Landscape.jpg": "/static/media/Thank You Banner Landscape.20cb901b8b2c08a042a7.jpg",
@@ -14,11 +14,11 @@
     "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
-    "main.e3d98bc5.css.map": "/static/css/main.e3d98bc5.css.map",
-    "main.3df5944c.js.map": "/static/js/main.3df5944c.js.map"
+    "main.1703518f.css.map": "/static/css/main.1703518f.css.map",
+    "main.d8e3faf1.js.map": "/static/js/main.d8e3faf1.js.map"
   },
   "entrypoints": [
-    "static/css/main.e3d98bc5.css",
-    "static/js/main.3df5944c.js"
+    "static/css/main.1703518f.css",
+    "static/js/main.d8e3faf1.js"
   ]
 }

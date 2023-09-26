@@ -1,12 +1,11 @@
 import { SmallDashOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Modal, Row, notification } from 'antd';
 import axios from 'axios';
+import moment from 'moment';
+import 'moment/locale/vi';
 import React, { useEffect, useState } from 'react';
 import { IoCartOutline, IoChatbubbleEllipsesOutline, IoLockClosedOutline, IoRefreshOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
-
-import moment from 'moment';
-import 'moment/locale/vi';
 import CONFIG from '../../config';
 import '../css/OrderInfo.css';
 const orderStatuses = [
@@ -27,10 +26,11 @@ function OrderInfo() {
 
   const userJson = localStorage.getItem('user');
   const user = JSON.parse(userJson);
-  const userId = user._id;
+  const userId = user ? user._id : null;
 
   useEffect(() => {
     // Gọi API để lấy danh sách các đơn hàng của người dùng
+
     axios
       .get(`${CONFIG.API_URL}orders/${userId}`)
       .then((response) => {
@@ -85,16 +85,13 @@ function OrderInfo() {
 
   return (
     <div>
-      <h4 style={{ marginLeft: '5%', marginBottom: '20px', marginTop: '40px' }}>Đơn hàng của bạn</h4>
+      <h2  style={{ marginLeft: '5%', marginBottom: '20px', marginTop: '40px' }}>Đơn hàng của bạn</h2>
 
       <div style={{ marginLeft: '5%', marginRight: '5%' }}>
         <Row gutter={[16, 16]} justify="center">
           {orderStatuses.map((status) => (
             <Col xs={24} sm={12} md={6} lg={6} key={status}>
-              <Card
-                onClick={() => setSelectedStatus(status)}
-                className={`custom-card ${selectedStatus === status ? 'selected' : ''}`}
-              >
+              <Card onClick={() => setSelectedStatus(status)} className={`custom-card ${selectedStatus === status ? 'selected' : ''}`}>
                 <div className="card-content">
                   <div className="icon">
                     {status === 'Chờ xác nhận' && <IoCartOutline size={40} />}
@@ -110,12 +107,12 @@ function OrderInfo() {
         </Row>
       </div>
 
-      <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '40px' , minHeight: '400px'}}>
+      <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '40px', minHeight: '400px' }}>
         {/* Kiểm tra nếu không có đơn hàng nào trong trạng thái đã chọn */}
         {isNoOrders ? (
-         <div style={{ minHeight: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-         <Empty description={<span>Không có đơn hàng nào trong trạng thái đã chọn.</span>} />
-       </div>
+          <div style={{ minHeight: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Empty description={<span>Không có đơn hàng nào trong trạng thái đã chọn.</span>} />
+          </div>
         ) : (
           sortedOrders.map((order) => (
             <div
@@ -128,7 +125,6 @@ function OrderInfo() {
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                 borderRadius: '8px',
                 backgroundColor: '#fff',
-                
               }}
             >
               <div style={{ display: 'flex' }}>
@@ -151,7 +147,7 @@ function OrderInfo() {
                       {order.cartItems[0].name}
                     </p>
                     <p style={{ color: '#666' }}>
-                      <strong>Giá:</strong> {order.cartItems[0].price.toLocaleString('en-US')} 
+                      <strong>Giá:</strong> {order.cartItems[0].price.toLocaleString('en-US')}
                     </p>
                     <p style={{ color: '#666' }}>
                       <strong>Số lượng:</strong> {order.cartItems[0].sizeAndQuantitySizeWant[0].quantity}
@@ -167,9 +163,11 @@ function OrderInfo() {
                     marginRight: '60px',
                   }}
                 >
-                  <p style={{ fontSize: '16px', color: '#444' }}>Tổng tiền thanh toán: {order.totalBill} đ</p>
+                  <p style={{ fontSize: '16px', color: '#444' }}>Tổng tiền thanh toán: {order.totalBill.toLocaleString('en-US')} đ</p>
                   <p style={{ fontSize: '16px', color: '#444' }}>Trạng thái: {order.status}</p>
-                  <p style={{ fontSize: '14px', color: '#888' }}>Ngày tạo: {moment(order.createdAt).locale('vi').format('DD/MM/YYYY - HH:mm')}</p>
+                  <p style={{ fontSize: '14px', color: '#888' }}>
+                    Ngày tạo: {moment(order.createdAt).locale('vi').format('DD/MM/YYYY - HH:mm')}
+                  </p>
 
                   <div>
                     <Button type="primary" onClick={() => showOrderDetails(order)} style={{ marginTop: '15px' }}>
@@ -177,21 +175,15 @@ function OrderInfo() {
                     </Button>
                     {/* Nút "Hủy đơn hàng" */}
                     {order.status === 'Chờ xác nhận' && (
-                      <Button
-                        danger
-                        onClick={() => handleCancelOrder(order)}
-                        style={{ marginTop: '15px', marginLeft: '15px' }}
-                      >
+                      <Button danger onClick={() => handleCancelOrder(order)} style={{ marginTop: '15px', marginLeft: '15px' }}>
                         Hủy đơn hàng
                       </Button>
                     )}
 
                     {order.status === 'Hoàn tất' && (
-                       <Link to={`/review?orderId=${order._id}`} key={order._id}>
-                       <Button   style={{ marginTop: '15px' ,marginLeft:'15px'}}>
-                         Đánh giá
-                       </Button>
-                     </Link>
+                      <Link to={`/review?orderId=${order._id}`} key={order._id}>
+                        <Button style={{ marginTop: '15px', marginLeft: '15px' }}>Đánh giá</Button>
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -215,8 +207,6 @@ function OrderInfo() {
       <Modal title="Thông tin đơn hàng" visible={!!selectedOrder} onCancel={closeModal} footer={null} width={1000}>
         {selectedOrder && (
           <div>
-            
-
             <p>
               <strong> ID:</strong> {selectedOrder._id}
             </p>

@@ -1,23 +1,23 @@
 import React from 'react';
-
-import banner1 from '../Img/Grey Minimalist Special Offer Banner Landscape.png';
+import { default as banner1, default as banner5 } from '../Img/Grey Minimalist Special Offer Banner Landscape.png';
 import banner2 from '../Img/Grey Modern Coming Soon Banner (Landscape) .png';
+import banner6 from '../Img/Thank You Banner Landscape.jpg';
+
 
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Carousel, Col, Row } from 'antd';
+import { Button, Card, Carousel, Col, Row, Typography } from 'antd';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
-import banner5 from '../Img/Grey Minimalist Special Offer Banner Landscape.png';
-import banner6 from '../Img/Thank You Banner Landscape.jpg';
+
 import CONFIG from '../config';
 import styles from './css/Home.module.css';
 
 import { IoCartOutline, IoChatbubbleEllipsesOutline, IoLockClosedOutline, IoRefreshOutline } from 'react-icons/io5';
-
+const { Title } = Typography;
 const sliderSettings = {
   dots: false,
   infinite: true,
@@ -99,8 +99,8 @@ function Home() {
       </div>
 
       <div className={styles.newArrivals}>
-        <h2 className={styles.newArrivalsTitle}>Sản Phẩm Mới</h2>
-        <h6 className={styles.newArrivalsTitle_h6}>Xem ngay để không bỏ lỡ bất kỳ sản phẩm mới nào của nhà North Star nhé </h6>
+        <Title level={2}>Sản phẩm bán chạy</Title>
+        <p className={styles.newArrivalsTitle_h6}>Xem ngay để không bỏ lỡ bất kỳ sản phẩm mới nào của nhà North Star nhé </p>
         <Row gutter={[16, 16]} justify="center" className="newArrivals_row_img">
           {loading ? (
             <p>Loading...</p>
@@ -130,12 +130,13 @@ function Home() {
                   <IoCartOutline size={40} /> {/* Đặt kích thước của icon */}
                 </div>
                 <div className={styles.benefitTextContainer}>
-                  <h5 className={styles.benefitTitle}>Free Ship</h5> {/* Tùy chỉnh kích thước chữ */}
+                  <Title level={5} style={{color: '#d3aaaa'}}>Free Ship</Title>
                   <p className={styles.benefitText}>Hỗ trợ freeship từ đơn hàng từ 500.000 vnd</p> {/* Tùy chỉnh kích thước chữ */}
                 </div>
               </div>
             </Card>
           </Col>
+
           <Col xs={24} sm={12} md={6} lg={6}>
             <Card className={styles.benefitCard}>
               <div className={styles.benefitContent}>
@@ -143,7 +144,8 @@ function Home() {
                   <IoChatbubbleEllipsesOutline size={40} /> {/* Đặt kích thước của icon */}
                 </div>
                 <div className={styles.benefitTextContainer}>
-                  <h5 className={styles.benefitTitle}>Hỗ Trợ 24/7</h5> {/* Tùy chỉnh kích thước chữ */}
+                  
+                  <Title level={5} style={{color: '#d3aaaa'}}>Hỗ Trợ 24/7</Title>
                   <p className={styles.benefitText}>
                     Đội ngũ hỗ trợ của chúng tôi sẽ luôn có mặt để hỗ trợ bạn<nav></nav>
                   </p>{' '}
@@ -152,6 +154,7 @@ function Home() {
               </div>
             </Card>
           </Col>
+
           <Col xs={24} sm={12} md={6} lg={6}>
             <Card className={styles.benefitCard}>
               <div className={styles.benefitContent}>
@@ -159,7 +162,7 @@ function Home() {
                   <IoRefreshOutline size={40} /> {/* Đặt kích thước của icon */}
                 </div>
                 <div className={styles.benefitTextContainer}>
-                  <h5 className={styles.benefitTitle}>Đổi Trả </h5> {/* Tùy chỉnh kích thước chữ */}
+                  <Title level={5} style={{color: '#d3aaaa'}}>Đổi trả</Title>
                   <p className={styles.benefitText}>Hỗ trợ khách hàng đổi trả lên tới 7 ngày </p> {/* Tùy chỉnh kích thước chữ */}
                 </div>
               </div>
@@ -173,7 +176,7 @@ function Home() {
                   <IoLockClosedOutline size={40} /> {/* Đặt kích thước của icon */}
                 </div>
                 <div className={styles.benefitTextContainer}>
-                  <h5 className={styles.benefitTitle}>Kiểm Tra / Thanh Toán</h5> {/* Tùy chỉnh kích thước chữ */}
+                <Title level={5} style={{color: '#d3aaaa'}}>Kiểm tra thanh toán</Title>
                   <p className={styles.benefitText}>Hỗ trợ kiểm tra hàng trước khi thanh toán </p> {/* Tùy chỉnh kích thước chữ */}
                 </div>
               </div>
@@ -181,6 +184,7 @@ function Home() {
           </Col>
         </Row>
       </div>
+      
 
       <div className={styles.promo}>
         <div
@@ -205,8 +209,8 @@ function Home() {
       </div>
       {/* // đây là best seller */}
       <div className={styles.newArrivals}>
-        <h2 className={styles.newArrivalsTitle}>Sản Phẩm Bán Chạy</h2>
-        <h6 className={styles.newArrivalsTitle_h6}>Nhanh tay để trải nghiệm những sản phẩm HOT nhất của nhà NorthStarr bạn nhé </h6>
+      <Title level={2}>Sản phẩm bán chạy</Title>
+        <p className={styles.newArrivalsTitle_h6}>Nhanh tay để trải nghiệm những sản phẩm HOT nhất của nhà NorthStarr bạn nhé </p>
 
         <Slider {...sliderSettings}>
           {bestSellingProducts.map((product) => (
@@ -237,16 +241,17 @@ function Home() {
       </div>
 
       <div className={styles.bannerFooter}>
-        <h2 className={styles.newArrivalsTitle}>NORTH STAR</h2>
-        <h6 className={styles.newArrivalsTitle} style={{ color: 'rgb(168, 178, 186)' }}>
+      <Title level={2} style={{textAlign:'center'}}>NorthStar </Title>
+        
+        <p className={styles.newArrivalsTitle} style={{ color: 'rgb(168, 178, 186)' }}>
           Mua hàng trên NorthStar luôn là một trải nghiệm ấn tượng,Dù bạn đang có nhu cầu mua bất kỳ mặt hàng nào thì 
          
-        </h6>
+        </p>
 
-        <h6 className={styles.newArrivalsTitle} style={{ color: 'rgb(168, 178, 186)', marginBottom: '40px' }}>
+        <p className={styles.newArrivalsTitle} style={{ color: 'rgb(168, 178, 186)', marginBottom: '40px' }}>
           {' '}
           NorthStar cũng sẽ đảm bảo cung cấp cho bạn những sản phẩm ưng ý.
-        </h6>
+        </p>
 
         <button
           onClick={() => navigate('/products')}

@@ -88,7 +88,7 @@ function ProductList() {
         <Col span={6}>
           <div style={{ marginBottom: 32 }}>
             <div style={{ color: 'rgb(22, 119, 255)' }}>
-              <h5>Lọc theo giá</h5>
+              <h3>Lọc theo giá</h3>
             </div>
             <div
               style={{
@@ -109,7 +109,7 @@ function ProductList() {
           </div>
 
           <div style={{ marginBottom: 32 }}>
-            <h5 style={{ color: 'rgb(22, 119, 255)' }}>Thương hiệu</h5>
+            <h3 style={{ color: 'rgb(22, 119, 255)' }}>Thương hiệu</h3>
 
             <Checkbox.Group
               options={brands.map((brand) => ({ label: brand, value: brand }))}
@@ -120,13 +120,13 @@ function ProductList() {
           </div>
 
           <div style={{ marginBottom: 32 }}>
-            <h5 style={{ color: 'rgb(22, 119, 255)', marginBottom: '16px' }}>Top sản phẩm</h5>
+            <h3 style={{ color: 'rgb(22, 119, 255)', marginBottom: '16px' }}>Top sản phẩm</h3>
 
             <Checkbox onChange={handleSortByBestSellingChange}>Sản phẩm bán chạy nhất</Checkbox>
           </div>
 
           <div style={{ marginBottom: 32 }}>
-            <h5 style={{ color: 'rgb(22, 119, 255)', marginBottom: '16px' }}>Tìm kiếm</h5>
+            <h3 style={{ color: 'rgb(22, 119, 255)', marginBottom: '16px' }}>Tìm kiếm</h3>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <input
                 type="text"
