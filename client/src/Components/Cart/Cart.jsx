@@ -112,14 +112,14 @@ const Cart = () => {
       dataIndex: 'price',
       key: 'price', // Đảm bảo rằng key là duy nhất
       align: 'center',
-      render: (price) => <span style={{ whiteSpace: 'nowrap' }}>{price.toLocaleString()} đ</span>,
+      render: (price) => <span style={{ whiteSpace: 'nowrap' }}>{price?.toLocaleString()} đ</span>,
     },
     {
       title: 'Giá ',
       dataIndex: 'productTotal',
       key: 'productTotal', // Sửa key thành "productTotal", đảm bảo key là duy nhất
       align: 'center',
-      render: (price) => <span style={{ whiteSpace: 'nowrap' }}>{price.toLocaleString()} đ</span>,
+      render: (price) => <span style={{ whiteSpace: 'nowrap' }}>{price?.toLocaleString()} đ</span>,
     },
     {
       title: 'Hành động',
@@ -358,7 +358,7 @@ const Cart = () => {
                             marginBottom: '16px',
                           }}
                         >
-                          Tổng bill: {totalBill.toLocaleString()} đ
+                          Tổng bill: {totalBill?.toLocaleString()} đ
                         </h4>
                         <Button type="primary" onClick={handlePlaceOrder}>
                           Đặt đơn hàng

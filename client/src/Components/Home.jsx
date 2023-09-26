@@ -112,7 +112,7 @@ function Home() {
                   onClick={() => handleCardClick(product._id)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <Card.Meta title={product.name} description={`Giá: ${product.price.toLocaleString("en-US")}`} />
+                  <Card.Meta title={product.name} description={`Giá: ${product.price?.toLocaleString("en-US")}`} />
 
                 </Card>
               </Col>
@@ -231,7 +231,7 @@ function Home() {
                 <div>
                   <h5 style={{ fontSize: '18px', color: '#333', marginTop: '20px' }}>{product.name}</h5>
                   <p style={{ color: '#666' }}>
-                    <strong>Giá:</strong> {product.price.toLocaleString("en-US")}
+                    <strong>Giá:</strong> {product.price?.toLocaleString("en-US")}
                   </p>
                 </div>
               </div>

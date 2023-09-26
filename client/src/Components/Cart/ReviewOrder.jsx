@@ -118,7 +118,7 @@ function ReviewOrder() {
                 <div>
                   <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#333' }}>{product.name}</h3>
                   <p style={{ color: '#666' }}>
-                    <strong>Giá:</strong> {product.price.toLocaleString('en-US')}
+                    <strong>Giá:</strong> {product.price?.toLocaleString('en-US')}
                   </p>
                   <p style={{ color: '#666' }}>
                     <strong>Số lượng:</strong> {product.sizeAndQuantitySizeWant[0].quantity}

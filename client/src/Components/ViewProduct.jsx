@@ -142,7 +142,7 @@ function ViewProduct() {
         <Col span={14}>
           <Card className={styles.card}>
             <Title level={4}>{product.name}</Title>
-            <Paragraph style={{ fontSize: '16px', marginBottom: '8px' }}>Giá: {product.price.toLocaleString('en-US')} đ</Paragraph>
+            <Paragraph style={{ fontSize: '16px', marginBottom: '8px' }}>Giá: {product.price?.toLocaleString('en-US')} đ</Paragraph>
             Đánh giá : <Rate disabled allowHalf value={averageRating} style={{ fontSize: '16px', marginBottom: '16px' }} />
             <Paragraph
               style={{

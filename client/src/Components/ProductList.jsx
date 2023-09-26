@@ -178,7 +178,7 @@ function ProductList() {
                         />
                       </div>
                       <div style={{ flex: 1, paddingLeft: '10px' }}>
-                        <p>Giá: {product.price.toLocaleString('en-US')}</p>
+                        <p>Giá: {product.price?.toLocaleString('en-US')}</p>
                         <p>Đã bán: {product.totalQuantitySold}</p>
                       </div>
                     </div>

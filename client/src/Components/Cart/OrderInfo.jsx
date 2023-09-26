@@ -147,7 +147,7 @@ function OrderInfo() {
                       {order.cartItems[0].name}
                     </p>
                     <p style={{ color: '#666' }}>
-                      <strong>Giá:</strong> {order.cartItems[0].price.toLocaleString('en-US')}
+                      <strong>Giá:</strong> {order.cartItems[0].price?.toLocaleString('en-US')}
                     </p>
                     <p style={{ color: '#666' }}>
                       <strong>Số lượng:</strong> {order.cartItems[0].sizeAndQuantitySizeWant[0].quantity}
@@ -163,7 +163,7 @@ function OrderInfo() {
                     marginRight: '60px',
                   }}
                 >
-                  <p style={{ fontSize: '16px', color: '#444' }}>Tổng tiền thanh toán: {order.totalBill.toLocaleString('en-US')} đ</p>
+                  <p style={{ fontSize: '16px', color: '#444' }}>Tổng tiền thanh toán: {order.totalBill?.toLocaleString('en-US')} đ</p>
                   <p style={{ fontSize: '16px', color: '#444' }}>Trạng thái: {order.status}</p>
                   <p style={{ fontSize: '14px', color: '#888' }}>
                     Ngày tạo: {moment(order.createdAt).locale('vi').format('DD/MM/YYYY - HH:mm')}
@@ -211,7 +211,7 @@ function OrderInfo() {
               <strong> ID:</strong> {selectedOrder._id}
             </p>
             <p>
-              <strong>Tổng tiền:</strong> {selectedOrder.totalBill.toLocaleString('en-US')}
+              <strong>Tổng tiền:</strong> {selectedOrder.totalBill?.toLocaleString('en-US')}
             </p>
             <p>
               <strong>Địa chỉ người nhận:</strong> {selectedOrder.selectedAddress}
@@ -241,7 +241,7 @@ function OrderInfo() {
                     <strong>Tên sản phẩm:</strong> {item.name}
                   </p>
                   <p>
-                    <strong>Giá:</strong> {item.price.toLocaleString('en-US')}
+                    <strong>Giá:</strong> {item.price?.toLocaleString('en-US')}
                   </p>
                   <p>
                     <strong>Số lượng:</strong> {item.sizeAndQuantitySizeWant[0].quantity}

@@ -69,7 +69,7 @@ function ProductManagement() {
       dataIndex: "price",
       key: "price",
       render(price) {
-        const formattedPrice = price.toLocaleString("en-US");
+        const formattedPrice = price?.toLocaleString("en-US");
         return <div>{formattedPrice}</div>;
       }
     

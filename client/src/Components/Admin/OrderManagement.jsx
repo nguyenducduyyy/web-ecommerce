@@ -110,7 +110,7 @@ function Order() {
         renderItem={(order) => (
           <Card style={{ marginBottom: '8px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>Giá trị đơn hàng : {order.totalBill.toLocaleString('en-US')}</span>
+              <span>Giá trị đơn hàng : {order.totalBill?.toLocaleString('en-US')}</span>
 
               <span>
                 Trạng thái:{' '}
@@ -143,7 +143,7 @@ function Order() {
                       <List.Item.Meta
                         avatar={<Avatar src={item.imageUrl} />}
                         title={item.name}
-                        description={`Giá: ${item.price.toLocaleString('en-US')} `}
+                        description={`Giá: ${item.price?.toLocaleString('en-US')} `}
                       />
                       <div>
                         {item.sizeAndQuantitySizeWant.map((sizeQty, i) => (
@@ -156,7 +156,7 @@ function Order() {
                   )}
                 />
                 <div style={{ display: 'flex', borderTop: '1px solid red', paddingTop: '20px', justifyContent: 'space-between' }}>
-                  <h4>Tổng bill : {order.totalBill.toLocaleString('en-US')} Vnd</h4>
+                  <h4>Tổng bill : {order.totalBill?.toLocaleString('en-US')} Vnd</h4>
                   <div style={{ display: 'flex' }}>
                     {order.status === 'Chờ xác nhận' && (
                       <Button onClick={() => handleStatusChange(order._id, 'Đã xác nhận')} style={{ marginLeft: '10px' }}>
