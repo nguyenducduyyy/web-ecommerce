@@ -40,13 +40,23 @@ function SalesStatistics() {
   };
 
   const calculateTotalRevenue = () => {
-    const total = soldProducts.reduce(
-      (total, product) =>
-        total + product.productId.price * getTotalSoldQuantity(product),
-      0
-    );
+    const total = soldProducts.reduce((total, product) => {
+      if (product.productId && product.productId.price) {
+        return total + product.productId.price * getTotalSoldQuantity(product);
+      }
+      return total;
+    }, 0);
     setTotalRevenue(total);
   };
+
+  // const calculateTotalRevenue = () => {
+  //   const total = soldProducts.reduce(
+  //     (total, product) =>
+  //       total + product.productId.price * getTotalSoldQuantity(product),
+  //     0
+  //   );
+  //   setTotalRevenue(total);
+  // };
 
   const getTotalSoldQuantity = (product) => {
     const soldEntriesInDate = product.sales.filter((entry) => {
@@ -71,7 +81,7 @@ function SalesStatistics() {
   const soldProductData = soldProducts.map((product) => {
     const totalSoldQuantity = getTotalSoldQuantity(product);
     return {
-      name: product.productId.name,
+      name: product.productId?.name,
       soldQuantity: totalSoldQuantity,
     };
   });
@@ -90,7 +100,7 @@ function SalesStatistics() {
               dataSource={soldProducts}
               renderItem={(product) => (
                 <List.Item>
-                  {product.productId.name} - Số lượng đã bán:{' '}
+                  {product.productId?.name} - Số lượng đã bán:{' '}
                   {getTotalSoldQuantity(product)}
                 </List.Item>
               )}
