@@ -4,8 +4,9 @@ const jwt = require("jsonwebtoken");
 class UserContronller {
   async getInfoUser(req, res) {
     try {
+      console.log('a');
       const userId = req.params.id;
-
+    
       // Tìm người dùng trong cơ sở dữ liệu
       const user = await User.findById(userId);
 
@@ -18,8 +19,6 @@ class UserContronller {
         return res.status(200).json({ user });
       
 
-      // Gửi thông tin người dùng về cho client
-      res.status(200).json(user);
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
